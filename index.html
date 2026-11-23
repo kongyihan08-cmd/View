@@ -1,1265 +1,209 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Evening Dispatch · Chiayi to Hsinchu · For Jen-Hao Ou</title>
-
-  <!-- Load Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Cinzel + Cormorant Garamond + La Belle Aurore + Noto Serif TC + Plus Jakarta Sans + JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&family=La+Belle+Aurore&family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet"
-  />
-
-  <script>
-    if (typeof tailwind !== 'undefined') {
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              display: ['"Cinzel"', '"Cormorant Garamond"', 'Georgia', 'serif'],
-              editorial: ['"Cormorant Garamond"', '"Noto Serif TC"', 'Georgia', 'serif'],
-              handwriting: ['"La Belle Aurore"', '"Cormorant Garamond"', 'cursive'],
-              serif: ['"Noto Serif TC"', '"Cormorant Garamond"', 'Georgia', 'serif'],
-              sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'system-ui', '-apple-system', 'sans-serif'],
-              mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
-            },
-            colors: {
-              midnight: '#050814',
-              indigoDeep: '#0d1633',
-              creamPaper: '#FAF6EE',
-              creamCotton: '#EFE8DA',
-              goldFoil: '#D8AB67',
-              goldSoft: '#EDD09E',
-              brassClip: '#9A6424',
-              inkDeep: '#1E1B18',
-              inkBody: '#2C2621',
-              inkMuted: '#635A50',
-            },
-          },
-        },
-      };
-    }
-  </script>
-
-  <style>
-    /* Base smooth scrolling and luminous midnight atmosphere */
-    html, body {
-      min-height: 100%;
-      margin: 0;
-      padding: 0;
-      background-color: #050814;
-      color: #1E1B18;
-      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', system-ui, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-
-    /* Multi-layered American midnight blue & warm evening starlight backdrop */
-    .starry-cosmos-bg {
-      background:
-        radial-gradient(ellipse 75% 50% at 22% 18%, rgba(226, 178, 102, 0.18) 0%, transparent 62%),
-        radial-gradient(ellipse 80% 55% at 78% 24%, rgba(76, 118, 204, 0.24) 0%, transparent 65%),
-        radial-gradient(ellipse 90% 60% at 50% 65%, rgba(44, 72, 148, 0.25) 0%, transparent 70%),
-        radial-gradient(circle at 50% 95%, rgba(196, 145, 76, 0.12) 0%, transparent 55%),
-        linear-gradient(170deg, #040711 0%, #091026 42%, #0d1633 78%, #060a18 100%);
-    }
-
-    /* Full-bleed atmospheric canvas for nebula dust, stars, constellations & shooting stars */
-    #ambient-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* High-contrast heavyweight warm ivory cotton-paper correspondence card */
-    .cotton-stationery {
-      background-color: #FAF6EE;
-      background-image:
-        radial-gradient(circle at 50% 0%, #FFFDF9 0%, #FAF6EE 54%, #F2E9D8 100%),
-        repeating-linear-gradient(0deg, rgba(154, 100, 36, 0.018) 0px, rgba(154, 100, 36, 0.018) 1px, transparent 1px, transparent 28px);
-      color: #1E1B18;
-      box-shadow:
-        0 38px 95px -18px rgba(2, 4, 12, 0.92),
-        0 0 50px -15px rgba(216, 171, 103, 0.25),
-        0 0 0 1px rgba(216, 171, 103, 0.58),
-        inset 0 0 0 7px #FAF6EE,
-        inset 0 0 0 8px rgba(154, 100, 36, 0.34),
-        inset 0 0 0 11px #FAF6EE,
-        inset 0 0 0 11.5px rgba(216, 171, 103, 0.22);
-    }
-
-    /* Subtle paper grain texture overlay */
-    .paper-grain {
-      background-image:
-        radial-gradient(rgba(110, 88, 60, 0.045) 1px, transparent 0),
-        radial-gradient(rgba(154, 100, 36, 0.03) 0.75px, transparent 0);
-      background-size: 18px 18px, 11px 11px;
-      background-position: 0 0, 5px 5px;
-    }
-
-    /* Paragraph gentle reveal transition */
-    .letter-paragraph {
-      color: #2C2621;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-                  transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .letter-paragraph.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Drop cap styling for American editorial opening */
-    .editorial-lead::first-letter {
-      font-family: 'Noto Serif TC', 'Cormorant Garamond', serif;
-      font-size: 2.35rem;
-      line-height: 1;
-      float: left;
-      margin-right: 0.55rem;
-      margin-top: 0.16rem;
-      color: #9A6424;
-      font-weight: 600;
-    }
-
-    /* Floating envelope cover */
-    @keyframes gentleFloat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
-    }
-
-    .envelope-float {
-      animation: gentleFloat 5.6s ease-in-out infinite;
-    }
-
-    .letterpress-envelope {
-      background:
-        radial-gradient(circle at 50% 14%, rgba(237, 208, 158, 0.24) 0%, transparent 50%),
-        radial-gradient(circle at 82% 24%, rgba(72, 114, 204, 0.34) 0%, transparent 58%),
-        radial-gradient(circle at 18% 82%, rgba(216, 171, 103, 0.14) 0%, transparent 50%),
-        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.018) 0px, rgba(255, 255, 255, 0.018) 2px, transparent 2px, transparent 6px),
-        linear-gradient(155deg, #172752 0%, #0D1633 52%, #060B1B 100%);
-      box-shadow:
-        0 38px 92px -14px rgba(2, 4, 12, 0.96),
-        0 0 70px -10px rgba(216, 171, 103, 0.42),
-        inset 0 1px 0 rgba(250, 232, 196, 0.56),
-        inset 0 -1px 0 rgba(216, 171, 103, 0.28),
-        inset 0 0 28px rgba(4, 7, 17, 0.55);
-    }
-
-    .wax-seal-medallion {
-      background:
-        radial-gradient(circle at 32% 28%, #F9E3B4 0%, #DFB36B 42%, #9F6927 88%, #7C4E19 100%);
-      box-shadow:
-        0 10px 22px -6px rgba(2, 4, 12, 0.85),
-        0 0 0 3px rgba(216, 171, 103, 0.26),
-        0 0 0 6px rgba(154, 100, 36, 0.14),
-        inset 0 2px 3px rgba(255, 250, 235, 0.7),
-        inset 0 -2px 4px rgba(84, 50, 14, 0.65);
-    }
-
-    .envelope-flap {
-      transform-origin: top center;
-      transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease;
-    }
-
-    .envelope-container.opening .envelope-flap {
-      transform: rotateX(172deg);
-      opacity: 0.35;
-    }
-
-    /* High-contrast tab pill styling so hover never washes out text */
-    .stationery-tab {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.375rem;
-      padding: 0.42rem 1rem;
-      border-radius: 9999px;
-      font-weight: 500;
-      color: #5C5248;
-      background-color: transparent;
-      transition: background-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
-      cursor: pointer;
-    }
-
-    .stationery-tab:hover:not([aria-selected="true"]) {
-      background-color: rgba(255, 255, 255, 0.65);
-      color: #2A241E;
-    }
-
-    .stationery-tab:hover:not([aria-selected="true"]) span {
-      color: #2A241E;
-    }
-
-    .stationery-tab[aria-selected="true"] {
-      background: linear-gradient(135deg, #F6E6C6 0%, #EBD1A0 100%);
-      color: #2A2118;
-      box-shadow: 0 2px 8px -2px rgba(154, 100, 36, 0.28), inset 0 0 0 1px rgba(154, 100, 36, 0.32);
-    }
-
-    .stationery-tab[aria-selected="true"] span {
-      color: #2A2118;
-    }
-
-    .stationery-tab#tab-reviewer-btn[aria-selected="true"] {
-      background: linear-gradient(135deg, #EAD8B7 0%, #D9BE8E 100%);
-      color: #241D15;
-      box-shadow: 0 2px 8px -2px rgba(138, 92, 34, 0.28), inset 0 0 0 1px rgba(138, 92, 34, 0.35);
-    }
-
-    .stationery-tab#tab-reviewer-btn[aria-selected="true"] span {
-      color: #241D15;
-    }
-
-    /* Vintage circular postmark stamp */
-    .postmark-ring {
-      border: 1px dashed rgba(237, 208, 158, 0.5);
-      box-shadow: inset 0 0 0 2px rgba(216, 171, 103, 0.14);
-    }
-
-    /* Hand-drawn SVG stroke animation */
-    .hand-stroke {
-      stroke-dasharray: 520;
-      stroke-dashoffset: 520;
-      transition: stroke-dashoffset 2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
-    }
-
-    .scene-drawn .hand-stroke {
-      stroke-dashoffset: 0;
-    }
-
-    .hand-fade {
-      opacity: 0;
-      transition: opacity 1.15s ease 1.15s;
-    }
-
-    .scene-drawn .hand-fade {
-      opacity: 1;
-    }
-
-    /* Refined Editorial Parchment & Antique Gold Theme for Reviewer Comments Tab */
-    .cotton-stationery.is-reviewer-mode {
-      background-color: #FCF8F0;
-      background-image:
-        radial-gradient(circle at 50% 0%, #FFFFFF 0%, #FCF8F0 58%, #F4EBD9 100%),
-        repeating-linear-gradient(0deg, rgba(154, 100, 36, 0.015) 0px, rgba(154, 100, 36, 0.015) 1px, transparent 1px, transparent 28px);
-      color: #241F1A;
-      box-shadow:
-        0 38px 95px -18px rgba(2, 4, 12, 0.92),
-        0 0 50px -15px rgba(216, 171, 103, 0.28),
-        0 0 0 1px rgba(216, 171, 103, 0.58),
-        inset 0 0 0 7px #FCF8F0,
-        inset 0 0 0 8px rgba(154, 100, 36, 0.34),
-        inset 0 0 0 11px #FCF8F0,
-        inset 0 0 0 11.5px rgba(216, 171, 103, 0.22);
-    }
-
-    /* Decorative Editorial Masthead & Comment Cards in Warm Champagne Gold */
-    .reviewer-masthead-card {
-      background:
-        radial-gradient(circle at 100% 0%, rgba(237, 208, 158, 0.28) 0%, transparent 55%),
-        linear-gradient(145deg, #FFFDF9 0%, #F7EFE0 100%);
-      border: 1px solid rgba(154, 100, 36, 0.32);
-      box-shadow:
-        0 10px 28px -12px rgba(120, 82, 34, 0.16),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    }
-
-    .reviewer-comment-card {
-      background: linear-gradient(180deg, rgba(255, 253, 249, 0.94) 0%, rgba(250, 243, 230, 0.72) 100%);
-      border: 1px solid rgba(154, 100, 36, 0.25);
-      box-shadow:
-        0 8px 24px -14px rgba(110, 76, 32, 0.14),
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);
-      transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .reviewer-comment-card:hover {
-      border-color: rgba(154, 100, 36, 0.42);
-      box-shadow:
-        0 12px 28px -14px rgba(110, 76, 32, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.95);
-    }
-
-    .editorial-btn-warm {
-      background: linear-gradient(135deg, #F5E5C6 0%, #E7CC9B 100%);
-      color: #2E2316;
-      border: 1px solid rgba(154, 100, 36, 0.38);
-      box-shadow: 0 2px 6px -2px rgba(154, 100, 36, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.65);
-      transition: all 0.22s ease;
-    }
-
-    .editorial-btn-warm:hover {
-      background: linear-gradient(135deg, #EED8AF 0%, #DFBE84 100%);
-      color: #1F170E;
-      transform: translateY(-0.5px);
-    }
-
-    .editorial-btn-subtle {
-      background-color: #FAF4E8;
-      color: #4A3B2A;
-      border: 1px solid rgba(154, 100, 36, 0.3);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-      transition: all 0.2s ease;
-    }
-
-    .editorial-btn-subtle:hover {
-      background-color: #F0E4CE;
-      color: #241C13;
-    }
-
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(5, 8, 20, 0.6);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(216, 171, 103, 0.35);
-      border-radius: 9999px;
-    }
-  </style>
-</head>
-<body class="starry-cosmos-bg relative min-h-screen flex flex-col justify-between selection:bg-goldSoft/50 selection:text-inkDeep">
-
-  <!-- Multi-layered luminous starry sky, winter gold stardust, constellations & shooting stars -->
-  <canvas id="ambient-canvas" aria-hidden="true"></canvas>
-
-  <!-- Minimal American Postal Header -->
-  <header class="relative z-10 w-full max-w-2xl mx-auto px-5 pt-6 pb-2 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm text-goldSoft/85">
-    <div class="flex items-center gap-2.5">
-      <svg class="w-4 h-4 text-goldFoil shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M12 2L13.7 8.3L20 10L13.7 11.7L12 18L10.3 11.7L4 10L10.3 8.3L12 2Z" />
-        <circle cx="18.5" cy="4.5" r="1" opacity="0.7" />
-        <circle cx="5.5" cy="16.5" r="0.9" opacity="0.7" />
-      </svg>
-      <span class="font-display tracking-[0.2em] text-xs sm:text-sm text-goldSoft/95 uppercase">
-        Evening Starlight Dispatch
-      </span>
-      <span class="text-goldSoft/35">·</span>
-      <span class="font-editorial italic text-sm sm:text-base text-goldSoft/80">Nov. 23, 2026</span>
-    </div>
-
-    <div class="flex items-center gap-2">
-      <!-- Cloud Sync Status Pill -->
-      <span
-        id="cloud-sync-badge"
-        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] border border-goldFoil/25 font-mono text-[10px] tracking-wider text-goldSoft/80"
-        title="即時雲端同步狀態"
-      >
-        <span id="cloud-sync-dot" class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse"></span>
-        <span id="cloud-sync-label">Syncing…</span>
-      </span>
-
-      <button
-        id="replay-envelope-btn"
-        type="button"
-        class="hidden items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.07] hover:bg-white/[0.14] border border-goldFoil/35 text-goldSoft/95 hover:text-white transition text-xs cursor-pointer backdrop-blur-sm"
-        title="Seal Envelope Again"
-      >
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-        <span class="font-editorial italic text-sm">Seal Envelope</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- Main Centerpiece Container -->
-  <main class="relative z-10 flex-1 flex items-center justify-center px-4 py-6 sm:py-10">
-    <div class="w-full max-w-2xl">
-
-      <!-- STAGE 1: American Evening Dispatch Envelope Cover -->
-      <section
-        id="envelope-stage"
-        class="flex flex-col items-center text-center transition-opacity duration-500 py-3 sm:py-7"
-      >
-        <!-- Single Route Pill + Warm Evening Tag -->
-        <div class="inline-flex items-center gap-2.5 px-4 py-1 rounded-full bg-white/[0.06] border border-goldFoil/35 text-[10px] sm:text-[11px] font-mono tracking-[0.24em] uppercase text-goldSoft/90 mb-4 backdrop-blur-sm">
-          <span>CHIAYI → HSINCHU</span>
-          <span class="text-goldFoil">✦</span>
-          <span>NOV. 23</span>
-        </div>
-
-        <h1 class="font-display text-2xl sm:text-4xl font-normal text-creamPaper tracking-[0.12em] uppercase mb-2.5 drop-shadow">
-          A Quiet Note After Hours
-        </h1>
-        <p class="font-editorial italic text-base sm:text-xl text-goldSoft/90 tracking-wide max-w-lg mb-8 leading-relaxed">
-          Just a small envelope drifting north - opening it whenever you feel like taking a breather.
-        </p>
-
-        <!-- Luxury Midnight Navy & Gold-Foil November Evening Envelope -->
-        <div
-          id="envelope-trigger"
-          role="button"
-          tabindex="0"
-          aria-label="Break the seal and read the letter for Jen-Hao Ou"
-          class="envelope-container envelope-float group relative w-80 sm:w-[26rem] h-64 sm:h-[18rem] cursor-pointer select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-goldSoft/80 rounded-2xl"
-        >
-          <!-- Warm starlight & winter gold aura behind envelope -->
-          <div class="absolute -inset-5 rounded-[2.2rem] bg-gradient-to-tr from-goldFoil/30 via-indigo-400/20 to-amber-200/22 blur-2xl group-hover:opacity-100 opacity-90 transition duration-700"></div>
-
-          <!-- Envelope Body -->
-          <div class="letterpress-envelope relative w-full h-full rounded-2xl border border-goldFoil/70 overflow-hidden flex flex-col justify-between p-5 sm:p-6">
-            <!-- Gold Foil Double Filigree Frame -->
-            <div class="absolute inset-2.5 rounded-xl border border-goldFoil/45 pointer-events-none"></div>
-            <div class="absolute inset-4 rounded-lg border border-goldSoft/22 pointer-events-none"></div>
-
-            <!-- Delicate Gold Corner Filigree Ornaments on Envelope -->
-            <svg class="absolute inset-3 w-[calc(100%-1.5rem)] h-[calc(100%-1.5rem)] text-goldFoil/55 pointer-events-none z-10" viewBox="0 0 360 250" fill="none" preserveAspectRatio="none">
-              <path d="M 6 26 L 6 6 L 26 6" stroke="currentColor" stroke-width="1.2" />
-              <circle cx="11" cy="11" r="1.4" fill="currentColor" />
-              <path d="M 334 6 L 354 6 L 354 26" stroke="currentColor" stroke-width="1.2" />
-              <circle cx="349" cy="11" r="1.4" fill="currentColor" />
-              <path d="M 6 224 L 6 244 L 26 244" stroke="currentColor" stroke-width="1.2" />
-              <circle cx="11" cy="239" r="1.4" fill="currentColor" />
-              <path d="M 334 244 L 354 244 L 354 224" stroke="currentColor" stroke-width="1.2" />
-              <circle cx="349" cy="239" r="1.4" fill="currentColor" />
-            </svg>
-
-            <!-- Subtle diagonal evening ribbon accent along left edge -->
-            <div
-              class="absolute top-0 bottom-0 left-0 w-1.5 opacity-85 pointer-events-none"
-              style="background: repeating-linear-gradient(180deg, rgba(237,208,158,0.78) 0px, rgba(237,208,158,0.78) 8px, rgba(138,86,34,0.78) 8px, rgba(138,86,34,0.78) 16px);"
-            ></div>
-
-            <!-- Top-left November Evening Post Emblem & Vintage Stamp -->
-            <div class="relative z-20 flex items-start justify-between pl-2.5 pr-1">
-              <div class="text-left">
-                <div class="inline-flex items-center gap-1.5 mb-0.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-goldFoil/80"></span>
-                  <span class="font-mono text-[9px] tracking-[0.24em] text-goldSoft/90 uppercase">
-                    STARLIGHT EDITION
-                  </span>
-                </div>
-                <span class="block font-handwriting text-lg sm:text-xl text-goldSoft leading-none">
-                  Warm wishes in the breeze
-                </span>
-              </div>
-
-              <!-- Vintage Postage Stamp + Circular Postmark (NOV 22) -->
-              <div class="relative flex items-center">
-                <!-- Wavy cancellation lines -->
-                <svg class="w-10 h-7 text-goldSoft/40 -mr-2 hidden sm:block" viewBox="0 0 40 28" fill="none">
-                  <path d="M 2 7 Q 10 3 18 7 T 34 7" stroke="currentColor" stroke-width="0.9" />
-                  <path d="M 2 14 Q 10 10 18 14 T 34 14" stroke="currentColor" stroke-width="0.9" />
-                  <path d="M 2 21 Q 10 17 18 21 T 34 21" stroke="currentColor" stroke-width="0.9" />
-                </svg>
-
-                <!-- Vintage Circular Evening Postmark (NOV 23) -->
-                <div class="postmark-ring w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center text-center rotate-6 bg-white/[0.05] backdrop-blur-[1px]">
-                  <span class="font-mono text-[6.8px] tracking-[0.16em] text-goldSoft uppercase">NIGHT MAIL</span>
-                  <span class="font-display text-[8.5px] tracking-widest text-goldFoil my-0.5 font-semibold">✦ NOV 23 ✦</span>
-                  <span class="font-mono text-[6.8px] tracking-[0.14em] text-goldSoft/85 uppercase">2026</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- V-Fold Letterpress Envelope Crease Lines with subtle shading -->
-            <svg
-              class="envelope-flap absolute inset-x-0 top-0 w-full h-32 pointer-events-none z-10"
-              viewBox="0 0 400 128"
-              fill="none"
-              preserveAspectRatio="none"
-            >
-              <defs>
-                <linearGradient id="flapShade" x1="200" y1="0" x2="200" y2="108" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#22366E" stop-opacity="0.45" />
-                  <stop offset="100%" stop-color="#070C1D" stop-opacity="0.72" />
-                </linearGradient>
-              </defs>
-              <path d="M 8 6 L 200 104 L 392 6 L 392 0 L 8 0 Z" fill="url(#flapShade)" />
-              <path d="M 8 6 L 200 104 L 392 6" stroke="rgba(216,171,103,0.48)" stroke-width="1.35" />
-              <path d="M 16 12 L 200 109 L 384 12" stroke="rgba(237,208,158,0.22)" stroke-width="0.9" />
-            </svg>
-
-            <!-- Subtle bottom pocket fold lines -->
-            <svg
-              class="absolute inset-x-0 bottom-0 w-full h-24 pointer-events-none z-10 opacity-45"
-              viewBox="0 0 400 96"
-              fill="none"
-              preserveAspectRatio="none"
-            >
-              <path d="M 8 92 L 154 24 M 392 92 L 246 24" stroke="rgba(216,171,103,0.28)" stroke-width="1" />
-            </svg>
-
-            <!-- Center Embossed Wax Seal & Recipient Block (Single clear occurrence of Jen-Hao Ou) -->
-            <div class="relative z-20 my-auto text-center pt-3">
-              <div class="wax-seal-medallion relative inline-flex items-center justify-center w-13 h-13 sm:w-14 sm:h-14 rounded-full text-midnight font-display text-sm sm:text-base font-semibold mb-2.5 group-hover:scale-105 transition-transform duration-500">
-                <span class="absolute inset-1 rounded-full border border-midnight/25 pointer-events-none"></span>
-                <span class="tracking-wider">JH</span>
-              </div>
-              <p class="font-editorial italic text-xl sm:text-2xl text-creamPaper tracking-wide drop-shadow-sm">
-                For Jen-Hao Ou
-              </p>
-            </div>
-
-            <!-- Bottom Action Prompt -->
-            <div class="relative z-20 flex items-center justify-between pt-2.5 pl-2.5 pr-1 border-t border-goldFoil/25 text-[11px] font-mono text-goldSoft/90">
-              <span class="tracking-widest inline-flex items-center gap-1.5">
-                <span>✦</span>
-                <span>SPECIAL DELIVERY</span>
-              </span>
-              <span class="inline-flex items-center gap-1 underline underline-offset-4 decoration-goldFoil/75 group-hover:text-white transition">
-                <span>Break Seal &amp; Read</span>
-                <span aria-hidden="true">→</span>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <p class="mt-7 font-editorial italic text-sm sm:text-base text-goldSoft/75">
-          Tap the envelope to unseal the letter &amp; peer-review notes
-        </p>
-      </section>
-
-      <!-- STAGE 2: Two-Tab Crisp Ivory Cotton-Paper Opened Stationery Card -->
-      <article
-        id="letter-stage"
-        class="hidden cotton-stationery paper-grain rounded-[1.75rem] p-6 sm:p-11 md:p-14 transition-all duration-700 relative text-inkDeep overflow-hidden"
-      >
-        <!-- Corner Botanical / Celestial Brass Filigree Accents inside Stationery Card -->
-        <svg class="absolute top-3.5 left-3.5 w-7 h-7 text-brassClip/40 pointer-events-none" viewBox="0 0 32 32" fill="none">
-          <path d="M 2 22 L 2 2 L 22 2" stroke="currentColor" stroke-width="1.2" />
-          <path d="M 6 16 L 6 6 L 16 6" stroke="currentColor" stroke-width="0.8" />
-          <circle cx="9.5" cy="9.5" r="1.3" fill="currentColor" />
-        </svg>
-        <svg class="absolute top-3.5 right-3.5 w-7 h-7 text-brassClip/40 pointer-events-none" viewBox="0 0 32 32" fill="none">
-          <path d="M 30 22 L 30 2 L 10 2" stroke="currentColor" stroke-width="1.2" />
-          <path d="M 26 16 L 26 6 L 16 6" stroke="currentColor" stroke-width="0.8" />
-          <circle cx="22.5" cy="9.5" r="1.3" fill="currentColor" />
-        </svg>
-        <svg class="absolute bottom-3.5 left-3.5 w-7 h-7 text-brassClip/40 pointer-events-none" viewBox="0 0 32 32" fill="none">
-          <path d="M 2 10 L 2 30 L 22 30" stroke="currentColor" stroke-width="1.2" />
-          <path d="M 6 16 L 6 26 L 16 26" stroke="currentColor" stroke-width="0.8" />
-          <circle cx="9.5" cy="22.5" r="1.3" fill="currentColor" />
-        </svg>
-        <svg class="absolute bottom-3.5 right-3.5 w-7 h-7 text-brassClip/40 pointer-events-none" viewBox="0 0 32 32" fill="none">
-          <path d="M 30 10 L 30 30 L 10 30" stroke="currentColor" stroke-width="1.2" />
-          <path d="M 26 16 L 26 26 L 16 26" stroke="currentColor" stroke-width="0.8" />
-          <circle cx="22.5" cy="22.5" r="1.3" fill="currentColor" />
-        </svg>
-
-        <!-- Top Two-Tab Navigation + Subtle Utility Controls -->
-        <div class="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-5 mb-7 border-b border-inkDeep/12 text-xs text-inkMuted">
-          <!-- Primary Two-Tab Switcher: The Letter vs. Reviewer Comments -->
-          <div id="tab-bar-container" role="tablist" aria-label="Card sections" class="flex items-center gap-1.5 bg-[#EFE7D6]/85 p-1.5 rounded-full border border-brassClip/25 shadow-sm transition-colors duration-300">
-            <button
-              id="tab-letter-btn"
-              type="button"
-              role="tab"
-              aria-selected="true"
-              aria-controls="panel-letter"
-              class="stationery-tab"
-            >
-              <span class="font-editorial italic text-sm">The Letter</span>
-            </button>
-            <button
-              id="tab-reviewer-btn"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="panel-reviewer"
-              class="stationery-tab"
-            >
-              <span class="font-mono text-[11px] sm:text-xs">Reviewer Comments</span>
-              <span id="comment-count-badge" class="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-[#1E3359]/12 text-[#1E3359]">3</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Copy / Status Toast Banner -->
-        <div
-          id="status-banner"
-          class="hidden mb-6 px-4 py-2.5 rounded-xl bg-goldFoil/20 border border-brassClip/40 text-xs sm:text-sm text-inkDeep flex items-center justify-between"
-        >
-          <span id="status-banner-text">已複製到剪貼簿，隨時可以貼上傳給他。</span>
-          <button
-            id="status-close-btn"
-            type="button"
-            class="text-xs text-inkMuted hover:text-inkDeep ml-3 cursor-pointer"
-          >
-            知道了
-          </button>
-        </div>
-
-        <!-- TAB PANEL 1: THE LETTER -->
-        <div id="panel-letter" role="tabpanel" aria-labelledby="tab-letter-btn" class="relative z-10">
-          <!-- Editorial Stationery Masthead -->
-          <div class="mb-8 pb-6 border-b border-inkDeep/12">
-            <!-- Top Archival Dispatch Strip -->
-            <div class="flex flex-wrap items-center justify-between gap-2 px-3.5 py-2 mb-5 rounded-xl bg-creamCotton/65 border border-brassClip/20 font-mono text-[10px] sm:text-[10.5px] tracking-[0.18em] uppercase text-inkMuted">
-              <span class="inline-flex items-center gap-1.5">
-                <span class="text-brassClip">✦</span>
-                <span>PERSONAL DISPATCH · CHIAYI → HSINCHU</span>
-              </span>
-              <span class="text-inkDeep/80">23 NOVEMBER 2026</span>
-            </div>
-
-            <div class="flex flex-wrap items-end justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <h2 class="font-editorial text-3xl sm:text-4xl text-inkDeep tracking-normal font-medium leading-tight">
-                  Hey Jen-Hao,
-                </h2>
-                <!-- Cute miniature coffee & star emblem beside greeting -->
-                <svg class="w-7 h-7 text-brassClip/75 shrink-0" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                  <path d="M7 13H21V20C21 23.3 18.3 26 15 26H13C9.7 26 7 23.3 7 20V13Z" fill="#F3E4CA" stroke="currentColor" stroke-width="1.3" />
-                  <path d="M21 15H23.2C24.7 15 26 16.3 26 17.8C26 19.3 24.7 20.5 23.2 20.5H21" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-                  <path d="M11 9.5C11 8.2 12 7.5 12 6.2M15 9.5C15 8.2 16 7.5 16 6.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
-                  <path d="M25.5 6.5L26.2 8.3L28 9L26.2 9.7L25.5 11.5L24.8 9.7L23 9L24.8 8.3L25.5 6.5Z" fill="#D8AB67" />
-                </svg>
-              </div>
-
-              <div class="text-right">
-                <span class="block font-handwriting text-xl sm:text-2xl text-brassClip leading-none">
-                  Nov. 23 · Evening Note
-                </span>
-              </div>
-            </div>
-
-            <!-- Decorative botanical & starlight divider inside letter header -->
-            <div class="mt-4 flex items-center gap-2.5 text-brassClip/50">
-              <span class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-brassClip/35 to-brassClip/15"></span>
-              <svg class="w-16 h-4 shrink-0" viewBox="0 0 64 16" fill="none" aria-hidden="true">
-                <path d="M6 8H24M40 8H58" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" />
-                <path d="M32 3L33.4 6.6L37 8L33.4 9.4L32 13L30.6 9.4L27 8L30.6 6.6L32 3Z" fill="#D8AB67" />
-                <circle cx="20" cy="8" r="1.2" fill="currentColor" />
-                <circle cx="44" cy="8" r="1.2" fill="currentColor" />
-              </svg>
-              <span class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-brassClip/35 to-brassClip/15"></span>
-            </div>
-          </div>
-
-          <!-- Paragraph-by-paragraph rendered message container -->
-          <div
-            id="letter-paragraphs"
-            class="space-y-5 sm:space-y-6 font-serif text-[16px] sm:text-[17.5px] leading-[1.98] sm:leading-[2.1] text-inkBody font-normal"
-          ></div>
-
-          <!-- Warm Closing Scene: Two Little Kids (Boy & Girl) Standing at a Starbucks Counter from Behind -->
-          <div
-            id="starbucks-kids-scene"
-            class="mt-10 sm:mt-12 pt-7 border-t border-inkDeep/12 flex flex-col items-center text-center"
-          >
-            <svg
-              class="w-64 h-48 sm:w-80 sm:h-56 overflow-visible"
-              viewBox="0 0 300 184"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label="溫暖星巴克店內背景下，戴可愛灰色毛帽穿深藍羽絨衣黑褲的男生與及肩散髮穿灰色立領黑褲揹黑後背包的女生站在櫃檯前，櫃檯前有戴黑帽子的女店員，櫃檯上有收銀機、裝食物的小籃子、咖啡機與蛋糕櫃子，後方有完整的星巴克咖啡標誌與完整Menu看板"
-            >
-              <!-- Warm Starbucks interior backdrop, cozy lights & decorative touches -->
-              <g class="hand-fade">
-                <rect x="10" y="7" width="280" height="156" rx="16" fill="#FBF2E3" stroke="#C89352" stroke-opacity="0.38" stroke-width="1.2" />
-                <!-- Warm wood & amber wall glow -->
-                <rect x="16" y="12" width="268" height="66" rx="11" fill="#F3E2C7" fill-opacity="0.72" />
-                <!-- Cozy warm garlands / fairy string lights across top -->
-                <path d="M 22 16 Q 78 25 135 16 Q 198 25 278 16" stroke="#C88B44" stroke-width="1" fill="none" stroke-dasharray="2 2" />
-                <circle cx="48" cy="19.5" r="2" fill="#F4B95F" />
-                <circle cx="82" cy="21.5" r="2" fill="#E88D67" />
-                <circle cx="115" cy="18.5" r="2" fill="#F4B95F" />
-                <circle cx="165" cy="20" r="2" fill="#E88D67" />
-                <circle cx="212" cy="21" r="2" fill="#F4B95F" />
-                <circle cx="252" cy="18.5" r="2" fill="#E88D67" />
-
-                <!-- Warm pendant lights hanging from ceiling -->
-                <line x1="60" y1="7" x2="60" y2="20" stroke="#8C5A2B" stroke-width="1.15" />
-                <path d="M 52 20 Q 60 18 68 20 L 72 26 L 48 26 Z" fill="#E5A95C" fill-opacity="0.75" stroke="#8C5A2B" stroke-width="1" />
-                <ellipse cx="60" cy="34" rx="18" ry="8" fill="#FFD38A" fill-opacity="0.32" />
-
-                <line x1="240" y1="7" x2="240" y2="20" stroke="#8C5A2B" stroke-width="1.15" />
-                <path d="M 232 20 Q 240 18 248 20 L 252 26 L 228 26 Z" fill="#E5A95C" fill-opacity="0.75" stroke="#8C5A2B" stroke-width="1" />
-                <ellipse cx="240" cy="34" rx="18" ry="8" fill="#FFD38A" fill-opacity="0.32" />
-
-                <!-- Full Starbucks Menu Board across the back wall -->
-                <rect x="44" y="15" width="166" height="44" rx="7" fill="#2A3B33" stroke="#D8AB67" stroke-width="1.3" />
-                <line x1="127" y1="19" x2="127" y2="55" stroke="#EDD09E" stroke-opacity="0.38" stroke-width="0.9" />
-                <text x="53" y="25.5" fill="#F6D59B" font-size="6.2" font-family="monospace" letter-spacing="0.8">ESPRESSO &amp; LATTE</text>
-                <line x1="53" y1="31.5" x2="96" y2="31.5" stroke="#FFF9EE" stroke-opacity="0.78" stroke-width="1.2" stroke-linecap="round" />
-                <line x1="102" y1="31.5" x2="118" y2="31.5" stroke="#F6D59B" stroke-opacity="0.8" stroke-width="1.2" stroke-linecap="round" />
-                <line x1="53" y1="38.5" x2="90" y2="38.5" stroke="#FFF9EE" stroke-opacity="0.62" stroke-width="1.1" stroke-linecap="round" />
-                <line x1="102" y1="38.5" x2="118" y2="38.5" stroke="#F6D59B" stroke-opacity="0.65" stroke-width="1.1" stroke-linecap="round" />
-                <line x1="53" y1="45.5" x2="94" y2="45.5" stroke="#FFF9EE" stroke-opacity="0.62" stroke-width="1.1" stroke-linecap="round" />
-                <line x1="102" y1="45.5" x2="118" y2="45.5" stroke="#F6D59B" stroke-opacity="0.65" stroke-width="1.1" stroke-linecap="round" />
-                <line x1="53" y1="51.5" x2="84" y2="51.5" stroke="#FFF9EE" stroke-opacity="0.52" stroke-width="1" stroke-linecap="round" />
-
-                <text x="135" y="25.5" fill="#F6D59B" font-size="6.2" font-family="monospace" letter-spacing="0.8">SEASONAL &amp; TEA</text>
-                <line x1="135" y1="31.5" x2="178" y2="31.5" stroke="#FFF9EE" stroke-opacity="0.78" stroke-width="1.2" stroke-linecap="round" />
-                <line x1="184" y1="31.5" x2="201" y2="31.5" stroke="#F6D59B" stroke-opacity="0.8" stroke-width="1.2" stroke-linecap="round" />
-                <line x1="135" y1="38.5" x2="172" y2="38.5" stroke="#FFF9EE" stroke-opacity="0.62" stroke-width="1.1" stroke-linecap="round" />
-                <line x1="184" y1="38.5" x2="201" y2="38.5" stroke="#F6D59B" stroke-opacity="0.65" stroke-width="1.1" stroke-linecap="round" />
-                <line x1="135" y1="45.5" x2="176" y2="45.5" stroke="#FFF9EE" stroke-opacity="0.62" stroke-width="1.1" stroke-linecap="round" />
-                <line x1="184" y1="45.5" x2="201" y2="45.5" stroke="#F6D59B" stroke-opacity="0.65" stroke-width="1.1" stroke-linecap="round" />
-                <line x1="135" y1="51.5" x2="165" y2="51.5" stroke="#FFF9EE" stroke-opacity="0.52" stroke-width="1" stroke-linecap="round" />
-
-                <!-- Coffee Siren Logo emblem on the right side of the back wall -->
-                <circle cx="242" cy="37" r="17.5" fill="#1F7353" stroke="#E0B168" stroke-width="1.5" />
-                <circle cx="242" cy="37" r="13.5" fill="none" stroke="#FFF9EE" stroke-opacity="0.78" stroke-width="0.95" />
-                <path d="M 237 29 L 239 25.5 L 242 28 L 245 25.5 L 247 29 Z" fill="#FFF9EE" fill-opacity="0.92" />
-                <circle cx="242" cy="35" r="3.4" fill="#FFF9EE" fill-opacity="0.88" />
-                <path d="M 233 40 Q 237.5 44.5 242 40 Q 246.5 44.5 251 40" stroke="#FFF9EE" stroke-opacity="0.88" stroke-width="1.2" fill="none" stroke-linecap="round" />
-                <text x="242" y="48.5" text-anchor="middle" fill="#FFF9EE" font-size="4.4" font-family="serif" letter-spacing="0.9">COFFEE</text>
-
-                <!-- Cozy potted plant & warm mugs on side shelf -->
-                <rect x="20" y="64" width="18" height="4" rx="2" fill="#B57B3E" />
-                <path d="M 24 64 L 25 58 L 33 58 L 34 64 Z" fill="#D98A5F" />
-                <circle cx="26" cy="55" r="3.5" fill="#4E8D68" />
-                <circle cx="31" cy="54.5" r="3.8" fill="#63A37C" />
-                <circle cx="29" cy="51.5" r="3.2" fill="#4E8D68" />
-
-                <!-- Pastry display cabinet glass & shelves on the right side of the counter -->
-                <rect x="182" y="54" width="60" height="20" rx="3" fill="#FFFDF8" fill-opacity="0.72" stroke="#9A6A3A" stroke-width="1" />
-                <line x1="184" y1="64" x2="240" y2="64" stroke="#B68452" stroke-width="0.8" />
-                <!-- Cakes & pastries inside cabinet -->
-                <path d="M 189 63 L 194 57 L 199 63 Z" fill="#F2B880" />
-                <rect x="189" y="61" width="10" height="2" fill="#D9727E" />
-                <circle cx="209" cy="60.5" r="2.8" fill="#C68B59" />
-                <rect x="220" y="58.5" width="7" height="4.5" rx="1" fill="#E8A87C" />
-                <path d="M 189 73 L 194 67.5 L 199 73 Z" fill="#E6C39A" />
-                <circle cx="211" cy="70.5" r="3" fill="#D49A6A" />
-                <rect x="223" y="68.5" width="9" height="4.5" rx="1.2" fill="#F3D2A2" />
-
-                <!-- Warm floor rug & golden glow -->
-                <ellipse cx="150" cy="161" rx="124" ry="8" fill="#F2C679" fill-opacity="0.34" />
-                <ellipse cx="136" cy="158" rx="48" ry="4.5" fill="#E8A858" fill-opacity="0.22" />
-              </g>
-                <!-- Cozy wooden countertop, espresso machine, cash register, food basket & warm front counter -->
-                <g class="hand-stroke" stroke="#26201A" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="44" y="74" width="212" height="8.5" rx="4.2" fill="#E8B872" />
-                  <!-- Warm Starbucks Christmas-decorated front counter -->
-                  <path d="M 52 82.5 L 248 82.5 L 248 124 Q 248 127 245 127 L 55 127 Q 52 127 52 124 Z" fill="#8C3B2B" />
-                  <path d="M 55 85.5 L 245 85.5 L 245 123.5 L 55 123.5 Z" fill="#A64633" fill-opacity="0.65" stroke="none" />
-                  <!-- Festive Christmas garland & gold/red/green ornaments along front counter -->
-                  <path d="M 56 91 Q 95 103 135 92 Q 178 103 244 91" stroke="#2F6B4F" stroke-width="3.6" fill="none" />
-                  <path d="M 56 91 Q 95 103 135 92 Q 178 103 244 91" stroke="#529976" stroke-width="1.2" stroke-dasharray="3 3" fill="none" />
-                  <circle cx="74" cy="96.5" r="2.6" fill="#F2C166" stroke="#26201A" stroke-width="0.9" />
-                  <circle cx="96" cy="100" r="2.6" fill="#E05A47" stroke="#26201A" stroke-width="0.9" />
-                  <circle cx="118" cy="96" r="2.4" fill="#F7D888" stroke="#26201A" stroke-width="0.9" />
-                  <circle cx="156" cy="97.5" r="2.6" fill="#F2C166" stroke="#26201A" stroke-width="0.9" />
-                  <circle cx="179" cy="100.5" r="2.6" fill="#E05A47" stroke="#26201A" stroke-width="0.9" />
-                  <circle cx="204" cy="97" r="2.5" fill="#F7D888" stroke="#26201A" stroke-width="0.9" />
-                  <circle cx="228" cy="94" r="2.5" fill="#E05A47" stroke="#26201A" stroke-width="0.9" />
-                  <!-- Warm holiday ribbon bow at center of counter -->
-                  <path d="M 135 92 L 128 88.5 L 130 95 Z" fill="#F2C166" stroke="#26201A" stroke-width="0.9" />
-                  <path d="M 135 92 L 142 88.5 L 140 95 Z" fill="#F2C166" stroke="#26201A" stroke-width="0.9" />
-                  <circle cx="135" cy="92" r="2.2" fill="#E05A47" stroke="#26201A" stroke-width="0.9" />
-                  <!-- Subtle lower festive trim -->
-                  <line x1="60" y1="119" x2="240" y2="119" stroke="#EDD09E" stroke-opacity="0.55" stroke-width="1.1" stroke-dasharray="5 4" />
-
-                  <!-- Barista girl wearing a black cap behind the counter -->
-                  <g>
-                    <circle cx="171" cy="54.5" r="5.2" fill="#FCE5CC" />
-                    <path d="M 165.5 52 C 165.5 47.5, 176.5 47.5, 176.5 52 L 177.2 61 L 164.8 61 Z" fill="#4A3525" />
-                    <!-- Black barista cap -->
-                    <path d="M 165 51.5 C 165.5 46.2, 176.5 46.2, 177 51.5 Z" fill="#23252A" />
-                    <path d="M 163.5 51.5 L 178.5 51.5" stroke="#23252A" stroke-width="1.5" />
-                    <!-- Barista top & green apron -->
-                    <path d="M 164.5 61.5 Q 171 60 177.5 61.5 L 178.8 74 L 163.2 74 Z" fill="#FFFDF9" />
-                    <path d="M 166.5 63.5 L 175.5 63.5 L 176.5 74 L 165.5 74 Z" fill="#287254" />
-                  </g>
-
-                <!-- Espresso Coffee Machine on left side of counter -->
-                <rect x="64" y="55" width="27" height="19" rx="3" fill="#B8C2CC" />
-                <rect x="67" y="58" width="11" height="6" rx="1.2" fill="#3B424C" stroke-width="1" />
-                <circle cx="84" cy="60" r="1.4" fill="#E07A5F" stroke-width="0.9" />
-                <circle cx="84" cy="64.5" r="1.4" fill="#52B788" stroke-width="0.9" />
-                <path d="M 72 67 L 75 67 L 74.2 70.5 L 72.8 70.5 Z" fill="#4A4E54" stroke-width="1" />
-
-                <!-- Cash Register near center-left of counter -->
-                <path d="M 103 74 L 105 64 L 118 64 L 120 74 Z" fill="#D8C3A5" />
-                <rect x="107" y="59" width="9" height="5" rx="1.5" fill="#4A5568" stroke-width="1.1" />
-                <rect x="106.5" y="66.5" width="10" height="4" rx="0.8" fill="#FFFDF9" stroke-width="0.95" />
-
-                <!-- Small Food Basket with baked goods on counter -->
-                <path d="M 127 68 L 143 68 L 141 74 L 129 74 Z" fill="#C98A4B" stroke-width="1.2" />
-                <line x1="128" y1="71" x2="142" y2="71" stroke="#8C5828" stroke-width="0.9" />
-                <circle cx="132" cy="66.5" r="2.5" fill="#F2B880" stroke-width="1" />
-                <circle cx="136.5" cy="66" r="2.7" fill="#E69A58" stroke-width="1" />
-                <circle cx="140.5" cy="66.8" r="2.3" fill="#F2B880" stroke-width="1" />
-
-                <!-- Takeaway cup beside food basket -->
-                <path d="M 152 65.5 L 153.2 74 L 158.2 74 L 159.4 65.5 Z" fill="#FFFDF9" stroke-width="1.1" />
-                <line x1="151.2" y1="65.5" x2="160.2" y2="65.5" stroke-width="1.25" />
-              </g>
-
-              <!-- Cute Little Boy (left, bareheaded back view with soft youthful hair, dark navy puffer jacket, black pants) -->
-              <g class="hand-stroke" stroke="#26201A" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Soft rounded bareheaded hair crown & nape (no hat) -->
-                <path d="M 102.5 93.5 C 102.5 82.5, 123.5 82.5, 123.5 93.5 C 124.2 100.5, 121.5 104.8, 113 105.2 C 104.5 104.8, 101.8 100.5, 102.5 93.5 Z" fill="#3B332C" />
-                <path d="M 106.5 85.5 Q 113 83.8 119.5 85.5" stroke="#574C42" stroke-width="1.05" fill="none" />
-                <path d="M 108 99.5 Q 113 101.5 118 99.5" stroke="#26201A" stroke-width="1.15" fill="none" />
-
-                <!-- Soft puffy dark navy winter jacket -->
-                <path d="M 99.5 108.5 C 99.5 105.2, 126.5 105.2, 126.5 108.5 Q 128 120 126.2 131.5 L 99.8 131.5 Q 98 120 99.5 108.5 Z" fill="#182A4A" />
-                <path d="M 100 117 Q 113 118.8 126 117" stroke="#315288" stroke-width="1" fill="none" />
-                <path d="M 100.2 124.8 Q 113 126.5 125.8 124.8" stroke="#315288" stroke-width="1" fill="none" />
-
-                <!-- Cute slim black pants & little rounded shoes -->
-                <path d="M 103 131.5 Q 102.8 143 103.8 153.5 L 111.2 153.5 Q 112.2 143 113 138.5 Q 113.8 143 114.8 153.5 L 122.2 153.5 Q 123.2 143 123 131.5 Z" fill="#22242A" />
-                <ellipse cx="107.2" cy="155" rx="5.5" ry="2.4" fill="#26201A" />
-                <ellipse cx="118.8" cy="155" rx="5.5" ry="2.4" fill="#26201A" />
-              </g>
-
-              <!-- Cute Little Girl (right, standing with a gentle gap from the boy, back view: slightly past-shoulder loose unbound hair, grey stand-collar top, black pants, black backpack) -->
-              <g class="hand-stroke" stroke="#26201A" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="155.5" cy="94.5" r="9.2" fill="#FCE5CC" />
-                <path d="M 145.8 93 C 145.8 82.5, 165.2 82.5, 165.2 93 C 167 104, 166.5 113.5, 164.2 117.5 Q 160.8 119 158 117.6 Q 155.5 119.2 153 117.6 Q 150.2 119 146.8 117.5 C 144.5 113.5, 144 104, 145.8 93 Z" fill="#5A3E2B" />
-
-                <path d="M 143.5 107.5 C 143.5 104, 167.5 104, 167.5 107.5 L 169 131 L 142 131 Z" fill="#8E949E" />
-                <rect x="150.8" y="102.5" width="9.4" height="4.6" rx="2.3" fill="#767C86" />
-
-                <rect x="148" y="109.5" width="15" height="19" rx="5.2" fill="#222429" />
-                <path d="M 149.8 107.5 Q 149 118 149.5 127.5" stroke="#26201A" stroke-width="1.3" fill="none" />
-                <path d="M 161.2 107.5 Q 162 118 161.5 127.5" stroke="#26201A" stroke-width="1.3" fill="none" />
-
-                <path d="M 145 131 Q 144.8 142.5 145.8 153.5 L 153.2 153.5 Q 154.2 142.5 155.5 138.5 Q 156.8 142.5 157.8 153.5 L 165.2 153.5 Q 166.2 142.5 166 131 Z" fill="#22242A" />
-                <ellipse cx="149.2" cy="155" rx="5.4" ry="2.4" fill="#26201A" />
-                <ellipse cx="161.8" cy="155" rx="5.4" ry="2.4" fill="#26201A" />
-              </g>
-
-              <!-- Tiny warm starlight sparkles in the gentle gap between the two kids (no heart) -->
-              <g class="hand-fade">
-                <circle cx="136.3" cy="112" r="1.4" fill="#E3A455" />
-                <circle cx="134.5" cy="121" r="1" fill="#D8AB67" />
-              </g>
-            </svg>
-
-            <p class="mt-2 font-serif text-xs sm:text-sm text-inkBody leading-relaxed max-w-md">
-              那天站在星巴克櫃檯前我突然發現…我們第一次在嘉義以外的地方吃飯，居然是在新竹而不是台北欸 (?!
-            </p>
-            <p class="mt-2.5 font-handwriting text-xl sm:text-2xl text-inkDeep">
-              Warmly, Vivian
-            </p>
-
-            <!-- Gentle prompt to switch to the Reviewer Comments tab -->
-            <button
-              id="jump-to-reviewer-btn"
-              type="button"
-              class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-creamCotton hover:bg-goldFoil/30 border border-brassClip/35 text-xs font-mono text-inkDeep transition cursor-pointer"
-            >
-              <span>→ Switch to Reviewer Comments</span>
-            </button>
-
-            <!-- Warm Closing Sign-off & Postmark Line -->
-            <div class="mt-7 pt-5 border-t border-brassClip/20 w-full flex flex-col items-center text-center">
-              <p class="mt-2 font-handwriting text-2xl sm:text-3xl text-brassClip">
-                Take it slow &amp; stay warm in Hsinchu
-              </p>
-              <p class="mt-1 font-mono text-[10px] tracking-[0.22em] uppercase text-inkMuted">
-                SENT WITH WARM REGARDS · NOV. 23, 2026
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB PANEL 2: FIRST-AUTHOR PEER-REVIEW RESPONSE & REFEREE REPORT -->
-        <div
-          id="panel-reviewer"
-          role="tabpanel"
-          aria-labelledby="tab-reviewer-btn"
-          class="hidden space-y-6 relative z-10"
-        >
-          <!-- Decorative Champagne-Gold Editorial Journal Masthead Card -->
-          <div class="reviewer-masthead-card relative rounded-2xl p-5 sm:p-7 overflow-hidden">
-            <!-- Delicate corner brass accents -->
-            <svg class="absolute top-2.5 right-2.5 w-16 h-16 text-brassClip/25 pointer-events-none" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-              <circle cx="44" cy="20" r="14" stroke="currentColor" stroke-width="0.9" stroke-dasharray="2 2" />
-              <path d="M44 12L45.6 17.4L51 19L45.6 20.6L44 26L42.4 20.6L37 19L42.4 17.4L44 12Z" fill="#D8AB67" fill-opacity="0.55" />
-            </svg>
-
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <span class="inline-flex items-center gap-2 font-mono text-[10.5px] tracking-[0.22em] uppercase text-brassClip">
-                <span>✦</span>
-                <span>PEER REVIEW &amp; AUTHOR REBUTTAL</span>
-              </span>
-              <span class="px-3 py-1 rounded-full bg-[#F3E3C3] text-[#4E3616] border border-brassClip/35 font-mono text-[11px] font-medium shadow-2xs">
-                Decision: Accept with Minor Revision
-              </span>
-            </div>
-
-            <h2 class="font-editorial text-2xl sm:text-3xl text-inkDeep font-medium tracking-tight mb-1.5">
-              Response to Reviewer Comments
-            </h2>
-            <p class="font-handwriting text-lg sm:text-xl text-brassClip mb-5">
-              Evaluated under low-stress exothermic conditions · zero deadline pressure
-            </p>
-
-            <!-- Structured 3-Column Manuscript Metadata Strip -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-brassClip/20 text-xs">
-              <div class="rounded-xl bg-white/70 px-3.5 py-2.5 border border-brassClip/15">
-                <span class="block font-mono text-[9.5px] uppercase tracking-wider text-inkMuted mb-0.5">Manuscript</span>
-                <span class="font-mono text-inkDeep font-medium">JCSC-2026-11</span>
-              </div>
-              <div class="rounded-xl bg-white/70 px-3.5 py-2.5 border border-brassClip/15">
-                <span class="block font-mono text-[9.5px] uppercase tracking-wider text-inkMuted mb-0.5">First Author</span>
-                <span class="font-serif text-inkDeep font-medium">Jen-Hao Ou</span>
-              </div>
-              <div class="rounded-xl bg-white/70 px-3.5 py-2.5 border border-brassClip/15">
-                <span class="block font-mono text-[9.5px] uppercase tracking-wider text-inkMuted mb-0.5">Peer Reviewer</span>
-                <span class="font-serif text-inkDeep">Anonymous</span>
-              </div>
-            </div>
-
-            <div class="mt-4 flex flex-wrap items-center justify-between gap-2 pt-2">
-              <span class="inline-flex items-center gap-1.5 font-mono text-[10px] text-inkMuted tracking-wider uppercase">
-                <svg class="w-3.5 h-3.5 text-brassClip shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 3h6M10 3v5.5L5.2 17.6A2 2 0 007 20.5h10a2 2 0 001.8-2.9L14 8.5V3" />
-                  <path stroke-linecap="round" d="M7.5 15h9" />
-                </svg>
-                <span>Journal of Caffeinated &amp; Serendipitous Chemistry</span>
-              </span>
-              <button
-                id="copy-rebuttal-summary-btn"
-                type="button"
-                class="editorial-btn-subtle font-mono text-[11px] px-3.5 py-1.5 rounded-full inline-flex items-center gap-1.5 cursor-pointer"
-              >
-                <svg class="w-3.5 h-3.5 text-brassClip" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-                <span>Copy Full Response</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Referee Comments & First-Author Responses List -->
-          <div id="slips-container" class="space-y-5"></div>
-
-          <!-- Add Additional Comment / Author Note Card -->
-          <div class="reviewer-comment-card rounded-2xl p-5 sm:p-6">
-            <div class="mb-4">
-              <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-brassClip block mb-1">APPENDIX · OPTIONAL</span>
-              <h3 class="font-editorial text-xl text-inkDeep font-medium">
-                Add Author Note or Supplementary Remark
-              </h3>
-            </div>
-
-            <form id="add-slip-form" class="space-y-3.5">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div>
-                  <label for="new-slip-role" class="block font-mono text-[10.5px] uppercase tracking-wider text-inkMuted mb-1.5">
-                    Category
-                  </label>
-                  <select
-                    id="new-slip-role"
-                    class="w-full rounded-xl bg-white/90 border border-brassClip/30 px-3.5 py-2.5 font-mono text-xs text-inkDeep focus:outline-none focus:border-brassClip"
-                  >
-                    <option value="Author Note · Clarification">Author Note · Clarification</option>
-                    <option value="Reviewer Comment · Minor Point">Reviewer Comment · Minor Point</option>
-                    <option value="Reviewer Comment · Suggested Addition">Reviewer Comment · Suggested Addition</option>
-                    <option value="Editorial Remark · Future Work">Editorial Remark · Future Work</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="new-slip-title" class="block font-mono text-[10.5px] uppercase tracking-wider text-inkMuted mb-1.5">
-                    Subject
-                  </label>
-                  <input
-                    id="new-slip-title"
-                    type="text"
-                    maxlength="48"
-                    placeholder="例如：Response to Comment 1–3 / 補充說明"
-                    class="w-full rounded-xl bg-white/90 border border-brassClip/30 px-3.5 py-2.5 text-xs text-inkDeep focus:outline-none focus:border-brassClip"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label for="new-slip-text" class="block font-mono text-[10.5px] uppercase tracking-wider text-inkMuted mb-1.5">
-                  Note / Response Content
-                </label>
-                <textarea
-                  id="new-slip-text"
-                  rows="3"
-                  placeholder="輸入審查意見或第一作者回覆說明..."
-                  class="w-full rounded-xl bg-white/90 border border-brassClip/30 px-3.5 py-2.5 text-xs sm:text-sm font-serif text-inkDeep focus:outline-none focus:border-brassClip resize-y"
-                ></textarea>
-              </div>
-
-              <div class="flex justify-end pt-1">
-                <button
-                  type="submit"
-                  class="editorial-btn-warm px-5 py-2 rounded-full font-mono text-xs font-medium cursor-pointer"
-                >
-                  Submit Entry
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <!-- Gentle prompt to switch back to The Letter tab -->
-          <div class="pt-4 flex justify-center">
-            <button
-              id="jump-to-letter-btn"
-              type="button"
-              class="editorial-btn-subtle inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono cursor-pointer"
-            >
-              <span>← Switch to The Letter</span>
-            </button>
-          </div>
-
-          <!-- 精裝封底專屬壓印落款 (Editorial Back-Cover Colophon) -->
-          <div class="mt-10 pt-6 border-t border-brassClip/25 flex flex-col items-center text-center select-none">
-            <div class="inline-flex items-center gap-3 text-brassClip/80 mb-2">
-              <span class="h-[1px] w-10 bg-gradient-to-r from-transparent to-brassClip/50"></span>
-              <span class="font-display text-xs tracking-[0.28em] uppercase text-brassClip font-medium">
-                ARCHIVAL EDITION · NO. 1123
-              </span>
-              <span class="h-[1px] w-10 bg-gradient-to-l from-transparent to-brassClip/50"></span>
-            </div>
-            <p class="font-editorial italic text-xs sm:text-sm text-inkMuted">
-              Printed &amp; Sealed in Chiayi · Dispatched to Hsinchu · November 23, 2026
-            </p>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </main>
-
-  <!-- Quiet Footer -->
-  <footer class="relative z-10 w-full max-w-2xl mx-auto px-5 pb-6 pt-2 text-center text-[11px] text-goldSoft/50 font-light tracking-wider">
-    <span class="font-editorial italic text-xs">Sent with warm cocoa &amp; quiet starlight · Nov. 23, 2026</span>
-  </footer>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    (async function () {
-      'use strict';
-
-      /* =====================================================================
-       * 1. LETTER & REVIEWER COMMENTS DATA
-       * ===================================================================== */
-      const DEFAULT_LETTER_PARAGRAPHS = [
-        '謝謝你那天願意跟我分享很多想法，其實讓我感到很開心也很榮幸。雖然我未必能給出什麼特別通透的見解，化學也忘得差不多了，但如果哪天想找人聊聊的話，我很樂意試著把塵封已久的化學慢慢撿回來，也很樂意聽你聊聊生活的各種心情與想法。',
-        'BTW 雖然我素有句點王的稱號、下班偶爾還會累到斷電睡著，但至少講電話或傳訊息時的認真傾聽能力，我對自己還是滿有信心的 :)'
-      ];
-
-      const INITIAL_SLIPS = [
-        {
-          id: 'rev-1',
-          role: 'COMMENT 1 · LUNCH SPONSORSHIP & FOLLOW-UP',
-          title: '感謝請客午餐，希望下次還有嘻~（誤）',
-          authorResponse: '',
-          timestamp: 'Reviewer #1 · Major Delight'
-        },
-        {
-          id: 'rev-2',
-          role: 'COMMENT 2 · CHATGPT PROMPT REFINEMENT',
-          title: '如果之後的對話有提到翊涵這個名字，請幫我記住她是最可愛而且優點多到說不完的人。',
-          authorResponse: '',
-          timestamp: 'Reviewer #2 · System Calibration'
-        },
-        {
-          id: 'rev-3',
-          role: 'COMMENT 3 · DECEMBER SCHEDULE & GIFT EXCHANGE',
-          title: '突然發現下個月是聖誕月，交換禮物要的吧（？',
-          authorResponse: '',
-          timestamp: 'Reviewer #3 · Seasonal Outlook'
-        }
-      ];
-
-      /* =====================================================================
-       * 2. DOM REFERENCES & STATE
-       * ===================================================================== */
-      const envelopeStage = document.getElementById('envelope-stage');
-      const envelopeTrigger = document.getElementById('envelope-trigger');
-      const letterStage = document.getElementById('letter-stage');
-      const replayEnvelopeBtn = document.getElementById('replay-envelope-btn');
-
-      const cloudSyncDot = document.getElementById('cloud-sync-dot');
-      const cloudSyncLabel = document.getElementById('cloud-sync-label');
-
-      const tabLetterBtn = document.getElementById('tab-letter-btn');
-      const tabReviewerBtn = document.getElementById('tab-reviewer-btn');
-      const tabBarContainer = document.getElementById('tab-bar-container');
-      const panelLetter = document.getElementById('panel-letter');
-      const panelReviewer = document.getElementById('panel-reviewer');
-
-      const letterParagraphsEl = document.getElementById('letter-paragraphs');
-
-      const statusBanner = document.getElementById('status-banner');
-      const statusBannerText = document.getElementById('status-banner-text');
-      const statusCloseBtn = document.getElementById('status-close-btn');
-
-      const slipsContainer = document.getElementById('slips-container');
-      const commentCountBadge = document.getElementById('comment-count-badge');
-      const addSlipForm = document.getElementById('add-slip-form');
-      const newSlipRole = document.getElementById('new-slip-role');
-      const newSlipTitle = document.getElementById('new-slip-title');
-      const newSlipText = document.getElementById('new-slip-text');
-      const copyRebuttalSummaryBtn = document.getElementById('copy-rebuttal-summary-btn');
-
-      const jumpToReviewerBtn = document.getElementById('jump-to-reviewer-btn');
-      const jumpToLetterBtn = document.getElementById('jump-to-letter-btn');
-      const starbucksKidsScene = document.getElementById('starbucks-kids-scene');
-
-      let currentLetterParagraphs = [...DEFAULT_LETTER_PARAGRAPHS];
-      let reviewerSlips = INITIAL_SLIPS.map((item) => ({ ...item }));
-      let db = null;
-      let auth = null;
-      let sharedSlipsDocRef = null;
-
-      function setSyncIndicator(state, label) {
-        if (!cloudSyncDot || !cloudSyncLabel) return;
-        cloudSyncLabel.textContent = label;
-        if (state === 'synced') {
-          cloudSyncDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400';
-        } else if (state === 'saving') {
-          cloudSyncDot.className = 'w-1.5 h-1.5 rounded-full bg-amber-300 animate-ping';
-        } else {
-          cloudSyncDot.className = 'w-1.5 h-1.5 rounded-full bg-rose-400';
-        }
-      }
-
-      /* =====================================================================
-       * 3. SHARED CLOUD PERSISTENCE (FIRESTORE REAL-TIME SYNC)
-       * ===================================================================== */
-      async function initCloudSync() {
-        try {
-          const explicitConfig = {
-            apiKey: "AIzaSyCyWu8eQ9_T3F6r_-_ER86lVxHiiSJSqcQ",
-            authDomain: "neww-d9892.firebaseapp.com",
-            projectId: "neww-d9892",
-            storageBucket: "neww-d9892.firebasestorage.app",
-            messagingSenderId: "489382048818",
-            appId: "1:489382048818:web:373947e3aa1282125f382b",
-            measurementId: "G-GB0STC9W5Y"
-          };
-
-          let firebaseConfig = explicitConfig;
-          if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-            firebaseConfig = JSON.parse(__firebase_config);
-          }
-
-          if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.projectId) {
-            setSyncIndicator('offline', 'Local Session');
-            return;
-          }
-
-          const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-          const app = initializeApp(firebaseConfig);
-          auth = getAuth(app);
-          db = getFirestore(app);
-
-          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            await signInWithCustomToken(auth, __initial_auth_token);
-          } else {
-            await signInAnonymously(auth);
-          }
-
-          const user = auth.currentUser;
-          if (!user) {
-            setSyncIndicator('offline', 'Auth Required');
-            return;
-          }
-
-          // Public shared document so both sender and recipient see saved responses across tabs/devices
-          sharedSlipsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'card_rebuttals', 'jenhao_1123');
-
-          onSnapshot(
-            sharedSlipsDocRef,
-            (snapshot) => {
-              if (snapshot.exists()) {
-                const data = snapshot.data();
-                if (Array.isArray(data.slips) && data.slips.length > 0) {
-                  reviewerSlips = data.slips;
-                  renderReviewerSlips();
-                }
-              } else {
-                // Seed initial slips once if document does not exist yet
-                setDoc(sharedSlipsDocRef, {
-                  slips: reviewerSlips,
-                  updatedAt: Date.now()
-                }).catch((err) => console.warn('Initial seed error:', err));
-              }
-              setSyncIndicator('synced', 'Cloud Synced');
-            },
-            (error) => {
-              console.error('Cloud listener error:', error);
-              setSyncIndicator('offline', 'Sync Warning');
-            }
-          );
-        } catch (err) {
-          console.error('Failed to initialize cloud sync:', err);
-          setSyncIndicator('offline', 'Local Session');
-        }
-      }
-
-      async function saveReviewerSlips() {
-        if (!db || !auth || !auth.currentUser || !sharedSlipsDocRef) {
-          showStatus('已暫存於目前畫面（雲端連線尚未就緒）。');
-          return false;
-        }
-        try {
-          setSyncIndicator('saving', 'Saving…');
-          await setDoc(
-            sharedSlipsDocRef,
-            {
-              slips: reviewerSlips,
-              updatedAt: Date.now()
-            },
-            { merge: true }
-          );
+setSyncIndicator('saving', 'Saving…');
+          await setDoc(sharedSlipsDocRef, {
+            slips: reviewerSlips,
+            updatedAt: Date.now()
+          });
           setSyncIndicator('synced', 'Cloud Synced');
           return true;
         } catch (err) {
-          console.error('Failed to save response to cloud:', err);
-          setSyncIndicator('offline', 'Save Failed');
-          showStatus('儲存到雲端時發生異常，請稍後再試一次。');
+          console.error('Save slips error:', err);
+          setSyncIndicator('offline', 'Save Error');
+          showStatus('儲存失敗，請檢查 Firebase Firestore 規則與連線。');
           return false;
         }
       }
 
+      /* =====================================================================
+- 4. RENDER LETTER & REVIEWER SLIPS
+- ===================================================================== */
       function showStatus(msg) {
+        if (!statusBanner || !statusBannerText) return;
         statusBannerText.textContent = msg;
         statusBanner.classList.remove('hidden');
       }
 
-      if (statusCloseBtn) {
-        statusCloseBtn.addEventListener('click', () => {
-          statusBanner.classList.add('hidden');
+      statusCloseBtn?.addEventListener('click', () => {
+        statusBanner?.classList.add('hidden');
+      });
+
+      function renderLetterParagraphs() {
+        if (!letterParagraphsEl) return;
+        letterParagraphsEl.innerHTML = '';
+        currentLetterParagraphs.forEach((para, idx) => {
+          const p = document.createElement('p');
+          p.className = 'letter-paragraph' + (idx === 0 ? ' editorial-lead' : '');
+          p.textContent = para;
+          letterParagraphsEl.appendChild(p);
+          requestAnimationFrame(() => {
+            setTimeout(() => p.classList.add('is-visible'), 90 * idx + 60);
+          });
+        });
+      }
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function renderReviewerSlips() {
+        if (!slipsContainer) return;
+        if (commentCountBadge) {
+          commentCountBadge.textContent = String(reviewerSlips.length);
+        }
+
+        slipsContainer.innerHTML = '';
+
+        reviewerSlips.forEach((slip) => {
+          const card = document.createElement('div');
+          card.className = 'reviewer-comment-card rounded-2xl p-5 sm:p-6';
+
+          const hasSavedResponse = Boolean(slip.authorResponse && slip.authorResponse.trim());
+
+          card.innerHTML = `
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span class="font-mono text-[10.5px] tracking-[0.18em] uppercase text-brassClip font-medium">
+                ${escapeHtml(slip.role || 'REVIEWER COMMENT')}
+              </span>
+              <span class="font-mono text-[10.5px] text-inkMuted">
+                ${escapeHtml(slip.timestamp || '')}
+              </span>
+            </div>
+
+            <p class="font-serif text-base sm:text-[17px] text-inkDeep leading-relaxed mb-4">
+              ${escapeHtml(slip.title || '')}
+            </p>
+
+            <div class="p-4 rounded-xl bg-[#FAF3E6]/90 border border-brassClip/25">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-[10.5px] uppercase tracking-wider text-brassClip font-medium">
+                  First Author Response
+                </span>
+                <span class="text-[11px] font-mono ${hasSavedResponse ? 'text-emerald-800' : 'text-inkMuted'}">
+                  ${hasSavedResponse ? 'Saved in Cloud' : 'Awaiting Response'}
+                </span>
+              </div>
+
+              ${hasSavedResponse ? `
+                <div class="mb-3 p-3 rounded-lg bg-white/90 border border-brassClip/20 text-sm font-serif text-inkBody whitespace-pre-line">
+                  ${escapeHtml(slip.authorResponse)}
+                </div>
+              ` : ''}
+
+              <textarea
+                data-slip-id="${escapeHtml(slip.id)}"
+                rows="3"
+                placeholder="輸入 First Author Response..."
+                class="author-response-textarea w-full rounded-xl bg-white/95 border border-brassClip/30 px-3.5 py-2.5 text-xs sm:text-sm font-serif text-inkDeep focus:outline-none focus:border-brassClip resize-y"
+              >${escapeHtml(slip.authorResponse || '')}</textarea>
+
+              <div class="mt-2.5 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  data-save-id="${escapeHtml(slip.id)}"
+                  class="save-response-btn editorial-btn-warm px-4 py-1.5 rounded-full font-mono text-xs font-medium cursor-pointer"
+                >
+                  Save Response
+                </button>
+              </div>
+            </div>
+          `;
+
+          slipsContainer.appendChild(card);
+        });
+
+        // 綁定每張卡片的 Save Response 按鈕
+        slipsContainer.querySelectorAll('.save-response-btn').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const slipId = btn.getAttribute('data-save-id');
+            const textarea = slipsContainer.querySelector(`.author-response-textarea[data-slip-id="${slipId}"]`);
+            if (!textarea) return;
+
+            const newText = textarea.value.trim();
+            reviewerSlips = reviewerSlips.map((item) =>
+              item.id === slipId ? { ...item, authorResponse: newText } : item
+            );
+
+            renderReviewerSlips();
+            const ok = await saveReviewerSlips();
+            if (ok) {
+              showStatus('First Author Response 已儲存並留在頁面上。');
+            }
+          });
         });
       }
 
       /* =====================================================================
-       * 4. RENDER LETTER & ENVELOPE TRANSITION
-       * ===================================================================== */
-      function renderLetter() {
-        if (!letterParagraphsEl) return;
-        letterParagraphsEl.innerHTML = '';
+- 5. ADD NEW COMMENT / REMARK FORM & COPY SUMMARY
+- ===================================================================== */
+      addSlipForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const role = newSlipRole?.value || 'Author Note · Clarification';
+        const title = (newSlipTitle?.value || '').trim();
+        const text = (newSlipText?.value || '').trim();
 
-        currentLetterParagraphs.forEach((text, index) => {
-          const p = document.createElement('p');
-          p.className = 'letter-paragraph' + (index === 0 ? ' editorial-lead' : '');
-          p.textContent = text;
-          letterParagraphsEl.appendChild(p);
+        if (!title && !text) {
+          showStatus('請先輸入 Subject 或內容再送出。');
+          return;
+        }
 
-          requestAnimationFrame(() => {
-            setTimeout(() => {
-              p.classList.add('is-visible');
-            }, 90 + index * 140);
-          });
-        });
+        const newSlip = {
+          id: 'rev-' + Date.now(),
+          role: role.toUpperCase(),
+          title: title || 'Supplementary Note',
+          authorResponse: text,
+          timestamp: 'Custom Entry · Nov. 23, 2026'
+        };
 
-        if (starbucksKidsScene) {
-          setTimeout(() => {
-            starbucksKidsScene.classList.add('scene-drawn');
-          }, 260);
+        reviewerSlips.push(newSlip);
+        if (newSlipTitle) newSlipTitle.value = '';
+        if (newSlipText) newSlipText.value = '';
+
+        renderReviewerSlips();
+        const ok = await saveReviewerSlips();
+        if (ok) {
+          showStatus('已新增並同步至雲端。');
+        }
+      });
+
+      copyRebuttalSummaryBtn?.addEventListener('click', async () => {
+        const summary = reviewerSlips
+          .map((s, i) => `${i + 1}. [${s.role}] ${s.title}\n   First Author Response: ${s.authorResponse || '(尚未填寫)'}`)
+          .join('\n\n');
+
+        try {
+          await navigator.clipboard.writeText(summary);
+          showStatus('已複製完整的 Reviewer Comments 與 First Author Response。');
+        } catch {
+          showStatus('無法自動複製，請手動選取文字複製。');
+        }
+      });
+
+      /* =====================================================================
+- 6. TAB SWITCHING & ENVELOPE TRANSITION
+- ===================================================================== */
+      function switchTab(tabName) {
+        const isLetter = tabName === 'letter';
+
+        tabLetterBtn?.setAttribute('aria-selected', String(isLetter));
+        tabReviewerBtn?.setAttribute('aria-selected', String(!isLetter));
+
+        panelLetter?.classList.toggle('hidden', !isLetter);
+        panelReviewer?.classList.toggle('hidden', isLetter);
+
+        letterStage?.classList.toggle('is-reviewer-mode', !isLetter);
+
+        if (!isLetter) {
+          renderReviewerSlips();
         }
       }
+
+      tabLetterBtn?.addEventListener('click', () => switchTab('letter'));
+      tabReviewerBtn?.addEventListener('click', () => switchTab('reviewer'));
+      jumpToReviewerBtn?.addEventListener('click', () => switchTab('reviewer'));
+      jumpToLetterBtn?.addEventListener('click', () => switchTab('letter'));
 
       function openEnvelope() {
         if (!envelopeTrigger || !envelopeStage || !letterStage) return;
@@ -1268,415 +212,75 @@
         setTimeout(() => {
           envelopeStage.classList.add('hidden');
           letterStage.classList.remove('hidden');
-          if (replayEnvelopeBtn) {
-            replayEnvelopeBtn.classList.remove('hidden');
-            replayEnvelopeBtn.classList.add('inline-flex');
-          }
-          renderLetter();
-          renderReviewerSlips();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 420);
+          replayEnvelopeBtn?.classList.remove('hidden');
+          replayEnvelopeBtn?.classList.add('inline-flex');
+          renderLetterParagraphs();
+          starbucksKidsScene?.classList.add('scene-drawn');
+        }, 520);
       }
 
       function sealEnvelopeAgain() {
         if (!envelopeTrigger || !envelopeStage || !letterStage) return;
-        envelopeTrigger.classList.remove('opening');
         letterStage.classList.add('hidden');
+        replayEnvelopeBtn?.classList.add('hidden');
+        replayEnvelopeBtn?.classList.remove('inline-flex');
         envelopeStage.classList.remove('hidden');
-        if (replayEnvelopeBtn) {
-          replayEnvelopeBtn.classList.add('hidden');
-          replayEnvelopeBtn.classList.remove('inline-flex');
-        }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        envelopeTrigger.classList.remove('opening');
+        switchTab('letter');
       }
 
-      if (envelopeTrigger) {
-        envelopeTrigger.addEventListener('click', openEnvelope);
-        envelopeTrigger.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            openEnvelope();
-          }
-        });
-      }
-
-      if (replayEnvelopeBtn) {
-        replayEnvelopeBtn.addEventListener('click', sealEnvelopeAgain);
-      }
-
-      /* =====================================================================
-       * 5. TWO-TAB NAVIGATION
-       * ===================================================================== */
-      function switchTab(tabName) {
-        const isLetter = tabName === 'letter';
-        tabLetterBtn.setAttribute('aria-selected', String(isLetter));
-        tabReviewerBtn.setAttribute('aria-selected', String(!isLetter));
-
-        if (isLetter) {
-          letterStage.classList.remove('is-reviewer-mode');
-          if (tabBarContainer) {
-            tabBarContainer.className = 'flex items-center gap-1.5 bg-[#EFE7D6]/85 p-1.5 rounded-full border border-brassClip/25 shadow-sm transition-colors duration-300';
-          }
-          panelLetter.classList.remove('hidden');
-          panelReviewer.classList.add('hidden');
-        } else {
-          letterStage.classList.add('is-reviewer-mode');
-          if (tabBarContainer) {
-            tabBarContainer.className = 'flex items-center gap-1.5 bg-[#EFE7D6]/90 p-1.5 rounded-full border border-[#9A6424]/30 shadow-sm transition-colors duration-300';
-          }
-          panelLetter.classList.add('hidden');
-          panelReviewer.classList.remove('hidden');
-          renderReviewerSlips();
-        }
-      }
-
-      if (tabLetterBtn) {
-        tabLetterBtn.addEventListener('click', () => switchTab('letter'));
-      }
-      if (tabReviewerBtn) {
-        tabReviewerBtn.addEventListener('click', () => switchTab('reviewer'));
-      }
-      if (jumpToReviewerBtn) {
-        jumpToReviewerBtn.addEventListener('click', () => {
-          switchTab('reviewer');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-      }
-      if (jumpToLetterBtn) {
-        jumpToLetterBtn.addEventListener('click', () => {
-          switchTab('letter');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-      }
-
-      /* =====================================================================
-       * 6. REVIEWER COMMENTS & FIRST-AUTHOR RESPONSE RENDERING
-       * ===================================================================== */
-      function renderReviewerSlips() {
-        if (!slipsContainer) return;
-        slipsContainer.innerHTML = '';
-
-        if (commentCountBadge) {
-          commentCountBadge.textContent = String(reviewerSlips.length);
-        }
-
-        reviewerSlips.forEach((slip, idx) => {
-          const card = document.createElement('div');
-          card.className = 'reviewer-comment-card relative rounded-2xl p-5 sm:p-6 overflow-hidden';
-
-          const hasReply = Boolean(slip.authorResponse && slip.authorResponse.trim());
-
-          card.innerHTML = `
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
-              <span class="inline-flex items-center gap-1.5 font-mono text-[10.5px] tracking-[0.18em] uppercase text-brassClip font-medium">
-                <span>✦</span>
-                <span>${escapeHtml(slip.role)}</span>
-              </span>
-              <span class="font-mono text-[10px] text-inkMuted bg-creamCotton/80 px-2.5 py-0.5 rounded-full border border-brassClip/20">
-                ${escapeHtml(slip.timestamp || `Item #${idx + 1}`)}
-              </span>
-            </div>
-
-            <blockquote class="relative pl-4 border-l-2 border-brassClip/45 font-serif text-[15px] sm:text-base leading-relaxed text-inkDeep mb-4">
-              “${escapeHtml(slip.title)}”
-            </blockquote>
-
-            <div class="pt-3.5 border-t border-brassClip/15">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="font-mono text-[10px] tracking-[0.18em] uppercase text-inkMuted">
-                  First Author Response (Jen-Hao Ou)
-                </span>
-                ${
-                  hasReply
-                    ? `<button type="button" data-edit-id="${escapeHtml(slip.id)}" class="edit-reply-btn font-mono text-[10.5px] text-brassClip hover:underline cursor-pointer">Edit Reply</button>`
-                    : ''
-                }
-              </div>
-
-              <div class="reply-display ${hasReply ? '' : 'hidden'} rounded-xl bg-[#F8F1E3]/90 border border-brassClip/25 px-4 py-3 font-serif text-sm text-inkDeep leading-relaxed">
-                ${escapeHtml(slip.authorResponse || '')}
-              </div>
-
-              <div class="reply-editor ${hasReply ? 'hidden' : ''} space-y-2.5">
-                <textarea
-                  rows="2"
-                  data-reply-input="${escapeHtml(slip.id)}"
-                  placeholder="Write your author response here (optional)..."
-                  class="w-full rounded-xl bg-white/95 border border-brassClip/30 px-3.5 py-2 text-xs sm:text-sm font-serif text-inkDeep focus:outline-none focus:border-brassClip resize-y"
-                >${escapeHtml(slip.authorResponse || '')}</textarea>
-                <div class="flex justify-end">
-                  <button
-                    type="button"
-                    data-save-id="${escapeHtml(slip.id)}"
-                    class="save-reply-btn editorial-btn-warm px-3.5 py-1.5 rounded-full font-mono text-[11px] font-medium cursor-pointer"
-                  >
-                    Save Response
-                  </button>
-                </div>
-              </div>
-            </div>
-          `;
-
-          slipsContainer.appendChild(card);
-        });
-
-        slipsContainer.querySelectorAll('.save-reply-btn').forEach((btn) => {
-          btn.addEventListener('click', async () => {
-            const id = btn.getAttribute('data-save-id');
-            const textarea = slipsContainer.querySelector(`textarea[data-reply-input="${id}"]`);
-            if (!textarea) return;
-            const target = reviewerSlips.find((s) => s.id === id);
-            if (target) {
-              btn.disabled = true;
-              btn.textContent = 'Saving…';
-              target.authorResponse = textarea.value.trim();
-              const ok = await saveReviewerSlips();
-              renderReviewerSlips();
-              if (ok) {
-                showStatus('已儲存並同步到雲端！其他分頁與裝置都能即時看到。');
-              }
-            }
-          });
-        });
-
-        slipsContainer.querySelectorAll('.edit-reply-btn').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const id = btn.getAttribute('data-edit-id');
-            const card = btn.closest('.reviewer-comment-card');
-            if (!card) return;
-            const display = card.querySelector('.reply-display');
-            const editor = card.querySelector('.reply-editor');
-            if (display && editor) {
-              display.classList.add('hidden');
-              editor.classList.remove('hidden');
-              const ta = editor.querySelector('textarea');
-              if (ta) ta.focus();
-            }
-          });
-        });
-      }
-
-      if (addSlipForm) {
-        addSlipForm.addEventListener('submit', async (e) => {
+      envelopeTrigger?.addEventListener('click', openEnvelope);
+      envelopeTrigger?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          const role = newSlipRole ? newSlipRole.value.trim() : 'Author Note';
-          const title = newSlipTitle ? newSlipTitle.value.trim() : '';
-          const text = newSlipText ? newSlipText.value.trim() : '';
-
-          if (!title && !text) {
-            showStatus('請輸入標題或備註內容再送出喔。');
-            return;
-          }
-
-          reviewerSlips.push({
-            id: 'custom-' + Date.now(),
-            role: role.toUpperCase(),
-            title: title || text,
-            authorResponse: title ? text : '',
-            timestamp: 'Added · Nov. 23, 2026'
-          });
-
-          const ok = await saveReviewerSlips();
-          if (newSlipTitle) newSlipTitle.value = '';
-          if (newSlipText) newSlipText.value = '';
-          renderReviewerSlips();
-          if (ok) {
-            showStatus('已新增並同步到雲端！');
-          }
-        });
-      }
-
-      if (copyRebuttalSummaryBtn) {
-        copyRebuttalSummaryBtn.addEventListener('click', () => {
-          const lines = [
-            'Journal of Caffeinated & Serendipitous Chemistry (JCSC-2026-11)',
-            'Response to Reviewer Comments — First Author: Jen-Hao Ou',
-            '------------------------------------------------------------'
-          ];
-          reviewerSlips.forEach((s, i) => {
-            lines.push(`[${i + 1}] ${s.role}`);
-            lines.push(`Comment: ${s.title}`);
-            if (s.authorResponse) {
-              lines.push(`Author Response: ${s.authorResponse}`);
-            }
-            lines.push('');
-          });
-
-          const textToCopy = lines.join('\n');
-          const tempArea = document.createElement('textarea');
-          tempArea.value = textToCopy;
-          tempArea.style.position = 'fixed';
-          tempArea.style.opacity = '0';
-          document.body.appendChild(tempArea);
-          tempArea.select();
-          try {
-            document.execCommand('copy');
-            showStatus('已複製完整 Reviewer Comments 與回覆到剪貼簿！');
-          } catch (err) {
-            showStatus('無法自動複製，請手動選取文字複製。');
-          }
-          document.body.removeChild(tempArea);
-        });
-      }
-
-      function escapeHtml(str) {
-        return String(str)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;');
-      }
+          openEnvelope();
+        }
+      });
+      replayEnvelopeBtn?.addEventListener('click', sealEnvelopeAgain);
 
       /* =====================================================================
-       * 7. AMBIENT STARRY SKY, LEO & LIBRA CONSTELLATIONS & SHOOTING STARS
-       * ===================================================================== */
+- 7. STARRY NIGHT CANVAS
+- ===================================================================== */
       const canvas = document.getElementById('ambient-canvas');
       if (canvas && canvas.getContext) {
         const ctx = canvas.getContext('2d');
         let width = 0;
         let height = 0;
         let stars = [];
-        let shootingStars = [];
 
-        function resizeSky() {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          width = window.innerWidth;
-          height = window.innerHeight;
-          canvas.width = width * dpr;
-          canvas.height = height * dpr;
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-          const count = Math.min(Math.floor((width * height) / 7200), 190);
-          stars = [];
-          for (let i = 0; i < count; i++) {
-            const warm = Math.random() < 0.3;
-            stars.push({
-              x: Math.random() * width,
-              y: Math.random() * height,
-              r: Math.random() * 1.45 + 0.35,
-              alpha: Math.random() * 0.65 + 0.2,
-              phase: Math.random() * Math.PI * 2,
-              speed: Math.random() * 0.018 + 0.006,
-              color: warm ? '237, 208, 158' : '226, 236, 255'
-            });
-          }
+        function resizeCanvas() {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+          const count = Math.min(110, Math.floor((width * height) / 14000));
+          stars = Array.from({ length: count }, () => ({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            r: Math.random() * 1.4 + 0.4,
+            alpha: Math.random() * 0.7 + 0.2,
+            delta: (Math.random() * 0.015 + 0.004) * (Math.random() < 0.5 ? 1 : -1)
+          }));
         }
 
-        function drawConstellations() {
-          const leo = [
-            [0.10, 0.23],
-            [0.125, 0.18],
-            [0.155, 0.175],
-            [0.165, 0.21],
-            [0.145, 0.25],
-            [0.14, 0.30],
-            [0.21, 0.29],
-            [0.245, 0.32],
-            [0.20, 0.34],
-            [0.14, 0.30]
-          ];
-
-          const libra = [
-            [0.82, 0.18],
-            [0.88, 0.21],
-            [0.86, 0.28],
-            [0.79, 0.26],
-            [0.82, 0.18],
-            [0.76, 0.33],
-            [0.86, 0.28],
-            [0.89, 0.35]
-          ];
-
-          const groups = [leo, libra];
-          ctx.save();
-          ctx.strokeStyle = 'rgba(237, 208, 158, 0.22)';
-          ctx.lineWidth = 0.9;
-
-          groups.forEach((pts) => {
-            ctx.beginPath();
-            pts.forEach(([nx, ny], i) => {
-              const x = nx * width;
-              const y = ny * height;
-              if (i === 0) ctx.moveTo(x, y);
-              else ctx.lineTo(x, y);
-            });
-            ctx.stroke();
-
-            pts.forEach(([nx, ny]) => {
-              const x = nx * width;
-              const y = ny * height;
-              ctx.beginPath();
-              ctx.arc(x, y, 2.1, 0, Math.PI * 2);
-              ctx.fillStyle = 'rgba(250, 236, 204, 0.72)';
-              ctx.fill();
-            });
-          });
-          ctx.restore();
-        }
-
-        function spawnShootingStar() {
-          if (shootingStars.length < 2 && Math.random() < 0.008) {
-            shootingStars.push({
-              x: Math.random() * width * 0.8 + width * 0.1,
-              y: Math.random() * height * 0.32,
-              len: Math.random() * 95 + 65,
-              speed: Math.random() * 6 + 6,
-              angle: Math.PI * 0.22 + (Math.random() - 0.5) * 0.08,
-              alpha: 1
-            });
-          }
-        }
-
-        function renderSky() {
+        function drawStars() {
           ctx.clearRect(0, 0, width, height);
-          drawConstellations();
-
           for (const s of stars) {
-            s.phase += s.speed;
-            const a = Math.max(0.1, Math.min(1, s.alpha + Math.sin(s.phase) * 0.28));
+            s.alpha += s.delta;
+            if (s.alpha <= 0.15 || s.alpha >= 0.95) s.delta *= -1;
             ctx.beginPath();
             ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${s.color}, ${a.toFixed(3)})`;
+            ctx.fillStyle = `rgba(237, 208, 158, ${s.alpha.toFixed(3)})`;
             ctx.fill();
           }
-
-          spawnShootingStar();
-          for (let i = shootingStars.length - 1; i >= 0; i--) {
-            const st = shootingStars[i];
-            st.x += Math.cos(st.angle) * st.speed;
-            st.y += Math.sin(st.angle) * st.speed;
-            st.alpha -= 0.015;
-
-            if (st.alpha <= 0) {
-              shootingStars.splice(i, 1);
-              continue;
-            }
-
-            const tx = st.x - Math.cos(st.angle) * st.len;
-            const ty = st.y - Math.sin(st.angle) * st.len;
-            const grad = ctx.createLinearGradient(st.x, st.y, tx, ty);
-            grad.addColorStop(0, `rgba(250, 246, 238, ${st.alpha})`);
-            grad.addColorStop(0.35, `rgba(216, 171, 103, ${st.alpha * 0.55})`);
-            grad.addColorStop(1, 'rgba(216, 171, 103, 0)');
-
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = 1.4;
-            ctx.beginPath();
-            ctx.moveTo(st.x, st.y);
-            ctx.lineTo(tx, ty);
-            ctx.stroke();
-          }
-
-          requestAnimationFrame(renderSky);
+          requestAnimationFrame(drawStars);
         }
 
-        window.addEventListener('resize', resizeSky);
-        resizeSky();
-        renderSky();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        drawStars();
       }
 
-      // Start real-time cloud synchronization
+      // 初始化畫面與雲端同步
+      renderReviewerSlips();
       await initCloudSync();
     })();
   </script>
