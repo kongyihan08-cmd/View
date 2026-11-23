@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Evening Dispatch · Chiayi to Hsinchu · For Jen-Hao Ou</title>
 
-  <!-- Load Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Cinzel + Cormorant Garamond + La Belle Aurore + Noto Serif TC + Plus Jakarta Sans + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -339,10 +337,10 @@
       <span
         id="cloud-sync-badge"
         class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.05] border border-goldFoil/25 font-mono text-[10px] tracking-wider text-goldSoft/80"
-        title="即時雲端同步狀態"
+        title="本機儲存狀態"
       >
-        <span id="cloud-sync-dot" class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse"></span>
-        <span id="cloud-sync-label">Syncing…</span>
+        <span id="cloud-sync-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <span id="cloud-sync-label">Saved Locally</span>
       </span>
 
       <button
@@ -547,7 +545,7 @@
           id="status-banner"
           class="hidden mb-6 px-4 py-2.5 rounded-xl bg-goldFoil/20 border border-brassClip/40 text-xs sm:text-sm text-inkDeep flex items-center justify-between"
         >
-          <span id="status-banner-text">已複製到剪貼簿，隨時可以貼上傳給他。</span>
+          <span id="status-banner-text">已儲存。</span>
           <button
             id="status-close-btn"
             type="button"
@@ -952,12 +950,11 @@
     <span class="font-editorial italic text-xs">Sent with warm cocoa &amp; quiet starlight · Nov. 23, 2026</span>
   </footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-
-    (async function () {
+  <script>
+    (function () {
       'use strict';
+
+      const STORAGE_KEY = 'evening_dispatch_reviewer_slips_v1';
 
       const DEFAULT_LETTER_PARAGRAPHS = [
         '謝謝你那天願意跟我分享很多想法，其實讓我感到很開心也很榮幸。雖然我未必能給出什麼特別通透的見解，化學也忘得差不多了，但如果哪天想找人聊聊的話，我很樂意試著把塵封已久的化學慢慢撿回來，也很樂意聽你聊聊生活的各種心情與想法。',
@@ -988,13 +985,34 @@
         }
       ];
 
+      function loadSlips() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return INITIAL_SLIPS.map((item) => ({ ...item }));
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
+        } catch (err) {
+          console.warn('localStorage load failed:', err);
+        }
+        return INITIAL_SLIPS.map((item) => ({ ...item }));
+      }
+
+      function saveSlips(slips) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(slips));
+          return true;
+        } catch (err) {
+          console.warn('localStorage save failed:', err);
+          return false;
+        }
+      }
+
       const envelopeStage = document.getElementById('envelope-stage');
       const envelopeTrigger = document.getElementById('envelope-trigger');
       const letterStage = document.getElementById('letter-stage');
       const replayEnvelopeBtn = document.getElementById('replay-envelope-btn');
-
-      const cloudSyncDot = document.getElementById('cloud-sync-dot');
-      const cloudSyncLabel = document.getElementById('cloud-sync-label');
 
       const tabLetterBtn = document.getElementById('tab-letter-btn');
       const tabReviewerBtn = document.getElementById('tab-reviewer-btn');
@@ -1019,86 +1037,7 @@
       const jumpToLetterBtn = document.getElementById('jump-to-letter-btn');
       const starbucksKidsScene = document.getElementById('starbucks-kids-scene');
 
-      let currentLetterParagraphs = [...DEFAULT_LETTER_PARAGRAPHS];
-      let reviewerSlips = INITIAL_SLIPS.map((item) => ({ ...item }));
-      let db = null;
-      let slipsDbRef = null;
-
-      function setSyncIndicator(state, label) {
-        if (!cloudSyncDot || !cloudSyncLabel) return;
-        cloudSyncLabel.textContent = label;
-        if (state === 'synced') {
-          cloudSyncDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400';
-        } else if (state === 'saving') {
-          cloudSyncDot.className = 'w-1.5 h-1.5 rounded-full bg-amber-300 animate-ping';
-        } else {
-          cloudSyncDot.className = 'w-1.5 h-1.5 rounded-full bg-rose-400';
-        }
-      }
-
-      function initCloudSync() {
-        try {
-          const firebaseConfig = {
-            apiKey: "AIzaSyDUUpg3UMhpFzHotlcIr7OoCJycWvjP5k8",
-            authDomain: "card-fca80.firebaseapp.com",
-            databaseURL: "https://card-fca80-default-rtdb.firebaseio.com",
-            projectId: "card-fca80",
-            storageBucket: "card-fca80.firebasestorage.app",
-            messagingSenderId: "728495046162",
-            appId: "1:728495046162:web:ac4d5fab0d03bca2afa2cb",
-            measurementId: "G-DZKHP5LE27"
-          };
-
-          const app = initializeApp(firebaseConfig);
-          db = getDatabase(app);
-          slipsDbRef = ref(db, 'eveningDispatch/jenhao_1123/slips');
-
-          onValue(
-            slipsDbRef,
-            (snapshot) => {
-              const val = snapshot.val();
-              if (Array.isArray(val) && val.length > 0) {
-                reviewerSlips = val;
-                renderReviewerSlips();
-              } else if (val && typeof val === 'object') {
-                const list = Object.values(val);
-                if (list.length > 0) {
-                  reviewerSlips = list;
-                  renderReviewerSlips();
-                }
-              } else {
-                set(slipsDbRef, reviewerSlips).catch((err) => console.warn('Initial seed error:', err));
-              }
-              setSyncIndicator('synced', 'Cloud Synced');
-            },
-            (error) => {
-              console.error('Firebase Realtime Database read error:', error);
-              setSyncIndicator('offline', 'Sync Warning');
-            }
-          );
-        } catch (err) {
-          console.error('Failed to initialize Firebase Realtime Database:', err);
-          setSyncIndicator('offline', 'Offline');
-        }
-      }
-
-      async function saveReviewerSlips() {
-        if (!db || !slipsDbRef) {
-          showStatus('雲端資料庫尚未連線，請稍後再試。');
-          return false;
-        }
-        try {
-          setSyncIndicator('saving', 'Saving…');
-          await set(slipsDbRef, reviewerSlips);
-          setSyncIndicator('synced', 'Cloud Synced');
-          return true;
-        } catch (err) {
-          console.error('Firebase Realtime Database write error:', err);
-          setSyncIndicator('offline', 'Save Error');
-          showStatus('儲存失敗，請確認 Realtime Database 規則已開放讀寫。');
-          return false;
-        }
-      }
+      let reviewerSlips = loadSlips();
 
       function showStatus(msg) {
         if (!statusBanner || !statusBannerText) return;
@@ -1113,7 +1052,7 @@
       function renderLetterParagraphs() {
         if (!letterParagraphsEl) return;
         letterParagraphsEl.innerHTML = '';
-        currentLetterParagraphs.forEach((para, idx) => {
+        DEFAULT_LETTER_PARAGRAPHS.forEach((para, idx) => {
           const p = document.createElement('p');
           p.className = 'letter-paragraph' + (idx === 0 ? ' editorial-lead' : '');
           p.textContent = para;
@@ -1165,16 +1104,12 @@
                 <span class="font-mono text-[10.5px] uppercase tracking-wider text-brassClip font-medium">
                   First Author Response
                 </span>
-                <span class="text-[11px] font-mono ${hasSavedResponse ? 'text-emerald-800' : 'text-inkMuted'}">
-                  ${hasSavedResponse ? 'Saved in Cloud' : 'Awaiting Response'}
+                <span class="response-badge text-[11px] font-mono ${hasSavedResponse ? 'text-emerald-800' : 'text-inkMuted'}">
+                  ${hasSavedResponse ? 'Saved on Page' : 'Awaiting Response'}
                 </span>
               </div>
 
-              ${hasSavedResponse ? `
-                <div class="mb-3 p-3 rounded-lg bg-white/90 border border-brassClip/20 text-sm font-serif text-inkBody whitespace-pre-line">
-                  ${escapeHtml(slip.authorResponse)}
-                </div>
-              ` : ''}
+              <div class="saved-response-box ${hasSavedResponse ? '' : 'hidden'} mb-3 p-3 rounded-lg bg-white/90 border border-brassClip/20 text-sm font-serif text-inkBody whitespace-pre-line">${escapeHtml(slip.authorResponse || '')}</div>
 
               <textarea
                 data-slip-id="${escapeHtml(slip.id)}"
@@ -1199,7 +1134,7 @@
         });
 
         slipsContainer.querySelectorAll('.save-response-btn').forEach((btn) => {
-          btn.addEventListener('click', async () => {
+          btn.addEventListener('click', () => {
             const slipId = btn.getAttribute('data-save-id');
             const textarea = slipsContainer.querySelector(`.author-response-textarea[data-slip-id="${slipId}"]`);
             if (!textarea) return;
@@ -1209,16 +1144,33 @@
               item.id === slipId ? { ...item, authorResponse: newText } : item
             );
 
-            renderReviewerSlips();
-            const ok = await saveReviewerSlips();
-            if (ok) {
-              showStatus('First Author Response 已儲存並留在頁面上。');
+            saveSlips(reviewerSlips);
+
+            const box = textarea.closest('.p-4');
+            const savedBox = box?.querySelector('.saved-response-box');
+            const badge = box?.querySelector('.response-badge');
+
+            if (savedBox) {
+              if (newText) {
+                savedBox.textContent = newText;
+                savedBox.classList.remove('hidden');
+              } else {
+                savedBox.textContent = '';
+                savedBox.classList.add('hidden');
+              }
             }
+
+            if (badge) {
+              badge.textContent = newText ? 'Saved on Page' : 'Awaiting Response';
+              badge.className = `response-badge text-[11px] font-mono ${newText ? 'text-emerald-800' : 'text-inkMuted'}`;
+            }
+
+            showStatus('First Author Response 已儲存並留在頁面上！重新整理網頁也會保留。');
           });
         });
       }
 
-      addSlipForm?.addEventListener('submit', async (e) => {
+      addSlipForm?.addEventListener('submit', (e) => {
         e.preventDefault();
         const role = newSlipRole?.value || 'Author Note · Clarification';
         const title = (newSlipTitle?.value || '').trim();
@@ -1238,14 +1190,13 @@
         };
 
         reviewerSlips.push(newSlip);
+        saveSlips(reviewerSlips);
+
         if (newSlipTitle) newSlipTitle.value = '';
         if (newSlipText) newSlipText.value = '';
 
         renderReviewerSlips();
-        const ok = await saveReviewerSlips();
-        if (ok) {
-          showStatus('已新增並同步至雲端。');
-        }
+        showStatus('已新增並留在頁面上！');
       });
 
       copyRebuttalSummaryBtn?.addEventListener('click', async () => {
@@ -1271,10 +1222,6 @@
         panelReviewer?.classList.toggle('hidden', isLetter);
 
         letterStage?.classList.toggle('is-reviewer-mode', !isLetter);
-
-        if (!isLetter) {
-          renderReviewerSlips();
-        }
       }
 
       tabLetterBtn?.addEventListener('click', () => switchTab('letter'));
@@ -1354,7 +1301,6 @@
       }
 
       renderReviewerSlips();
-      initCloudSync();
     })();
   </script>
 </body>
