@@ -1350,9 +1350,9 @@
         });
       }
 
-   /* =====================================================================
-- 6. REVIEWER COMMENTS & FIRST-AUTHOR RESPONSE RENDERING
-- ===================================================================== */
+      /* =====================================================================
+       * 6. REVIEWER COMMENTS & FIRST-AUTHOR RESPONSE RENDERING
+       * ===================================================================== */
       function renderReviewerSlips() {
         if (!slipsContainer) return;
         slipsContainer.innerHTML = '';
@@ -1366,8 +1366,6 @@
           card.className = 'reviewer-comment-card relative rounded-2xl p-5 sm:p-6 overflow-hidden';
 
           const hasReply = Boolean(slip.authorResponse && slip.authorResponse.trim());
-          // 僅限自行新增的項目（id 以 custom- 開頭）顯示 Delete 按鈕
-          const canDelete = String(slip.id || '').startsWith('custom-');
 
           card.innerHTML = `
             <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
@@ -1375,16 +1373,9 @@
                 <span>✦</span>
                 <span>${escapeHtml(slip.role)}</span>
               </span>
-              <div class="flex items-center gap-2">
-                <span class="font-mono text-[10px] text-inkMuted bg-creamCotton/80 px-2.5 py-0.5 rounded-full border border-brassClip/20">
-                  ${escapeHtml(slip.timestamp || `Item #${idx + 1}`)}
-                </span>
-                ${
-                  canDelete
-                    ? `<button type="button" data-delete-id="${escapeHtml(slip.id)}" class="delete-slip-btn font-mono text-[10.5px] text-red-700/80 hover:text-red-800 hover:underline cursor-pointer">Delete</button>`
-                    : ''
-                }
-              </div>
+              <span class="font-mono text-[10px] text-inkMuted bg-creamCotton/80 px-2.5 py-0.5 rounded-full border border-brassClip/20">
+                ${escapeHtml(slip.timestamp || `Item #${idx + 1}`)}
+              </span>
             </div>
 
             <blockquote class="relative pl-4 border-l-2 border-brassClip/45 font-serif text-[15px] sm:text-base leading-relaxed text-inkDeep mb-4">
@@ -1430,36 +1421,114 @@
           slipsContainer.appendChild(card);
         });
 
-        slipsContainer.querySelectorAll('.delete-slip-btn').forEach((btn) => {
+        slipsContainer.querySelectorAll('.save-reply-btn').forEach((btn) => {
           btn.addEventListener('click', async () => {
-            const id = btn.getAttribute('data-delete-id');
-            if (!id || !String(id).startsWith('custom-')) return;
-
-            const confirmed = window.confirm('確定要刪除這則新增的項目嗎？刪除後會同步更新到雲端。');
-            if (!confirmed) return;
-
-            btn.disabled = true;
-            btn.textContent = 'Deleting…';
-
-            const prevSlips = [...reviewerSlips];
-            reviewerSlips = reviewerSlips.filter((s) => String(s.id) !== String(id));
-            renderReviewerSlips();
-
-            const ok = await saveReviewerSlips();
-            if (ok) {
-              showStatus('已刪除新增項目並同步到雲端！');
-            } else if (!db || !auth || !auth.currentUser || !sharedSlipsDocRef) {
-              reviewerSlips = prevSlips;
+            const id = btn.getAttribute('data-save-id');
+            const textarea = slipsContainer.querySelector(`textarea[data-reply-input="${id}"]`);
+            if (!textarea) return;
+            const target = reviewerSlips.find((s) => s.id === id);
+            if (target) {
+              btn.disabled = true;
+              btn.textContent = 'Saving…';
+              target.authorResponse = textarea.value.trim();
+              const ok = await saveReviewerSlips();
               renderReviewerSlips();
+              if (ok) {
+                showStatus('已儲存並同步到雲端！其他分頁與裝置都能即時看到。');
+              }
             }
           });
         });
 
-        slipsContainer.querySelectorAll('.save-reply-btn').forEach((btn) => {
-          btn.addEventListener('click', async () => {
-            const id = btn.getAttribute('data-save-id');
-            const
-              
+        slipsContainer.querySelectorAll('.edit-reply-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-edit-id');
+            const card = btn.closest('.reviewer-comment-card');
+            if (!card) return;
+            const display = card.querySelector('.reply-display');
+            const editor = card.querySelector('.reply-editor');
+            if (display && editor) {
+              display.classList.add('hidden');
+              editor.classList.remove('hidden');
+              const ta = editor.querySelector('textarea');
+              if (ta) ta.focus();
+            }
+          });
+        });
+      }
+
+      if (addSlipForm) {
+        addSlipForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const role = newSlipRole ? newSlipRole.value.trim() : 'Author Note';
+          const title = newSlipTitle ? newSlipTitle.value.trim() : '';
+          const text = newSlipText ? newSlipText.value.trim() : '';
+
+          if (!title && !text) {
+            showStatus('請輸入標題或備註內容再送出喔。');
+            return;
+          }
+
+          reviewerSlips.push({
+            id: 'custom-' + Date.now(),
+            role: role.toUpperCase(),
+            title: title || text,
+            authorResponse: title ? text : '',
+            timestamp: 'Added · Nov. 23, 2026'
+          });
+
+          const ok = await saveReviewerSlips();
+          if (newSlipTitle) newSlipTitle.value = '';
+          if (newSlipText) newSlipText.value = '';
+          renderReviewerSlips();
+          if (ok) {
+            showStatus('已新增並同步到雲端！');
+          }
+        });
+      }
+
+      if (copyRebuttalSummaryBtn) {
+        copyRebuttalSummaryBtn.addEventListener('click', () => {
+          const lines = [
+            'Journal of Caffeinated & Serendipitous Chemistry (JCSC-2026-11)',
+            'Response to Reviewer Comments — First Author: Jen-Hao Ou',
+            '------------------------------------------------------------'
+          ];
+          reviewerSlips.forEach((s, i) => {
+            lines.push(`[${i + 1}] ${s.role}`);
+            lines.push(`Comment: ${s.title}`);
+            if (s.authorResponse) {
+              lines.push(`Author Response: ${s.authorResponse}`);
+            }
+            lines.push('');
+          });
+
+          const textToCopy = lines.join('\n');
+          const tempArea = document.createElement('textarea');
+          tempArea.value = textToCopy;
+          tempArea.style.position = 'fixed';
+          tempArea.style.opacity = '0';
+          document.body.appendChild(tempArea);
+          tempArea.select();
+          try {
+            document.execCommand('copy');
+            showStatus('已複製完整 Reviewer Comments 與回覆到剪貼簿！');
+          } catch (err) {
+            showStatus('無法自動複製，請手動選取文字複製。');
+          }
+          document.body.removeChild(tempArea);
+        });
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
       /* =====================================================================
        * 7. AMBIENT STARRY SKY, LEO & LIBRA CONSTELLATIONS & SHOOTING STARS
        * ===================================================================== */
