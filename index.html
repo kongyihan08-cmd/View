@@ -1530,8 +1530,8 @@
       }
 
       /* =====================================================================
-       * 7. AMBIENT STARRY SKY, LEO & LIBRA CONSTELLATIONS & SHOOTING STARS
-       * ===================================================================== */
+- 7. AMBIENT STARRY SKY, LEO & LIBRA CONSTELLATIONS & SHOOTING STARS
+- ===================================================================== */
       const canvas = document.getElementById('ambient-canvas');
       if (canvas && canvas.getContext) {
         const ctx = canvas.getContext('2d');
@@ -1539,6 +1539,7 @@
         let height = 0;
         let stars = [];
         let shootingStars = [];
+        let windAngle = 0.35;
 
         function resizeSky() {
           const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1564,55 +1565,168 @@
           }
         }
 
-        function drawConstellations() {
-          const leo = [
-            [0.10, 0.23],
-            [0.125, 0.18],
-            [0.155, 0.175],
-            [0.165, 0.21],
-            [0.145, 0.25],
-            [0.14, 0.30],
-            [0.21, 0.29],
-            [0.245, 0.32],
-            [0.20, 0.34],
-            [0.14, 0.30]
+    function drawConstellations() {
+          // 以固定基準尺寸繪製星座，再依螢幕縮放，避免寬螢幕被拉扁變形
+          const scale = Math.min(width, height) * 0.24;
+
+          // 獅子座 Leo：右側鐮刀弧線（反問號）+ 左側獅身與獅尾
+          const leoOriginX = width * 0.14;
+          const leoOriginY = height * 0.23;
+          const leoPoints = [
+            [0.32, 0.24],  // 0: 軒轅十四 Regulus（鐮刀底端亮星）
+            [0.36, 0.06],  // 1: η Leo
+            [0.34, -0.14], // 2: γ Leo（軒轅十二，鐮刀彎折處）
+            [0.24, -0.30], // 3: ζ Leo
+            [0.08, -0.38], // 4: μ Leo
+            [-0.08, -0.34],// 5: ε Leo（獅頭前端）
+            [0.02, 0.02],  // 6: δ Leo（獅背/臀部）
+            [-0.36, -0.02],// 7: Denebola（五帝座一，獅尾）
+            [-0.06, 0.26]  // 8: θ Leo（獅腹/後腿）
+          ];
+          const leoLines = [
+            [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], // 鐮刀弧線
+            [2, 6], [6, 7],                         // 獅背到獅尾
+            [6, 8], [8, 0]                          // 獅腹與前胸連線
           ];
 
-          const libra = [
-            [0.82, 0.18],
-            [0.88, 0.21],
-            [0.86, 0.28],
-            [0.79, 0.26],
-            [0.82, 0.18],
-            [0.76, 0.33],
-            [0.86, 0.28],
-            [0.89, 0.35]
+          // 天秤座 Libra：下方較大秤盤四邊形 + 上方延伸秤臂
+          const libraOriginX = width * 0.85;
+          const libraOriginY = height * 0.23;
+          const libraPoints = [
+            [-0.14, 0.26], // 0: α Lib（氏宿一，左下秤底）
+            [0.24, 0.20],  // 1: β Lib（氏宿四，右下秤底）
+            [0.14, -0.18], // 2: σ Lib（右上秤框）
+            [-0.12, -0.12],// 3: υ Lib（左上秤框）
+            [-0.32, -0.34],// 4: τ Lib（左秤臂延伸）
+            [0.38, 0.04]   // 5: γ Lib（右秤臂延伸）
+          ];
+          const libraLines = [
+            [0, 1], [1, 2], [2, 3], [3, 0], // 主秤盤四邊形
+            [3, 4], [1, 5]                  // 秤臂延伸線
           ];
 
-          const groups = [leo, libra];
-          ctx.save();
-          ctx.strokeStyle = 'rgba(237, 208, 158, 0.22)';
-          ctx.lineWidth = 0.9;
+          function renderOne(originX, originY, pts, lines, title) {
+            ctx.save();
+            ctx.strokeStyle = 'rgba(237, 208, 158, 0.30)';
+            ctx.lineWidth = 1.05;
 
-          groups.forEach((pts) => {
             ctx.beginPath();
-            pts.forEach(([nx, ny], i) => {
-              const x = nx * width;
-              const y = ny * height;
-              if (i === 0) ctx.moveTo(x, y);
-              else ctx.lineTo(x, y);
+            lines.forEach(([a, b]) => {
+              const [ax, ay] = pts[a];
+              const [bx, by] = pts[b];
+              ctx.moveTo(originX + ax * scale, originY + ay * scale);
+              ctx.lineTo(originX + bx * scale, originY + by * scale);
             });
             ctx.stroke();
 
-            pts.forEach(([nx, ny]) => {
-              const x = nx * width;
-              const y = ny * height;
+            pts.forEach(([px, py], idx) => {
+              const sx = originX + px * scale;
+              const sy = originY + py * scale;
+              const r = idx === 0 ? 2.8 : 2.1;
+
+              const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, r * 3.6);
+              glow.addColorStop(0, 'rgba(237, 208, 158, 0.35)');
+              glow.addColorStop(1, 'rgba(237, 208, 158, 0)');
+              ctx.fillStyle = glow;
               ctx.beginPath();
-              ctx.arc(x, y, 2.1, 0, Math.PI * 2);
-              ctx.fillStyle = 'rgba(250, 236, 204, 0.72)';
+              ctx.arc(sx, sy, r * 3.6, 0, Math.PI * 2);
+              ctx.fill();
+
+              ctx.beginPath();
+              ctx.arc(sx, sy, r, 0, Math.PI * 2);
+              ctx.fillStyle = 'rgba(252, 240, 212, 0.9)';
               ctx.fill();
             });
-          });
+
+            ctx.restore();
+          }
+
+          renderOne(leoOriginX, leoOriginY, leoPoints, leoLines, 'LEO');
+          renderOne(libraOriginX, libraOriginY, libraPoints, libraLines, 'LIBRA');
+        }
+
+        function drawChiayiMountainsAndHsinchuWindmills() {
+          ctx.save();
+          const baseY = height;
+
+          // 1. 左側：嘉義層疊山巒剪影（低調融入星夜）
+          ctx.fillStyle = 'rgba(14, 24, 52, 0.52)';
+          ctx.beginPath();
+          ctx.moveTo(0, baseY);
+          ctx.lineTo(0, baseY - height * 0.13);
+          ctx.lineTo(width * 0.07, baseY - height * 0.20);
+          ctx.lineTo(width * 0.14, baseY - height * 0.15);
+          ctx.lineTo(width * 0.23, baseY - height * 0.25);
+          ctx.lineTo(width * 0.31, baseY - height * 0.16);
+          ctx.lineTo(width * 0.40, baseY - height * 0.11);
+          ctx.lineTo(width * 0.48, baseY);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.strokeStyle = 'rgba(216, 171, 103, 0.18)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(0, baseY - height * 0.13);
+          ctx.lineTo(width * 0.07, baseY - height * 0.20);
+          ctx.lineTo(width * 0.14, baseY - height * 0.15);
+          ctx.lineTo(width * 0.23, baseY - height * 0.25);
+          ctx.lineTo(width * 0.31, baseY - height * 0.16);
+          ctx.lineTo(width * 0.40, baseY - height * 0.11);
+          ctx.stroke();
+
+          // 右側低緩丘陵底線
+          ctx.fillStyle = 'rgba(11, 19, 43, 0.48)';
+          ctx.beginPath();
+          ctx.moveTo(width * 0.52, baseY);
+          ctx.quadraticCurveTo(width * 0.72, baseY - height * 0.09, width, baseY - height * 0.12);
+          ctx.lineTo(width, baseY);
+          ctx.closePath();
+          ctx.fill();
+
+          // 2. 右側：新竹風車剪影（主風車 + 遠處較小風車，葉片緩慢轉動）
+          function drawWindmill(cx, cy, towerH, bladeLen, angleOffset, alpha) {
+            ctx.save();
+            ctx.strokeStyle = `rgba(237, 208, 158, ${alpha})`;
+            ctx.fillStyle = `rgba(237, 208, 158, ${alpha * 0.75})`;
+            ctx.lineWidth = 1.15;
+
+            // 塔身（微梯形）
+            ctx.beginPath();
+            ctx.moveTo(cx - 2.2, cy);
+            ctx.lineTo(cx - 0.9, cy - towerH);
+            ctx.lineTo(cx + 0.9, cy - towerH);
+            ctx.lineTo(cx + 2.2, cy);
+            ctx.closePath();
+            ctx.fill();
+
+            // 三支風車葉片
+            const hubY = cy - towerH;
+            for (let b = 0; b < 3; b++) {
+              const a = windAngle + angleOffset + (b * Math.PI * 2) / 3;
+              const bx = cx + Math.cos(a) * bladeLen;
+              const by = hubY + Math.sin(a) * bladeLen;
+
+              ctx.beginPath();
+              ctx.moveTo(cx, hubY);
+              ctx.lineTo(bx, by);
+              ctx.stroke();
+            }
+
+            // 輪轂中心點
+            ctx.beginPath();
+            ctx.arc(cx, hubY, 1.8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+
+          const mainMillX = width * 0.84;
+          const mainMillY = baseY - height * 0.055;
+          const subMillX = width * 0.92;
+          const subMillY = baseY - height * 0.078;
+
+          drawWindmill(mainMillX, mainMillY, Math.min(height * 0.15, 115), Math.min(width * 0.045, 42), 0, 0.34);
+          drawWindmill(subMillX, subMillY, Math.min(height * 0.105, 80), Math.min(width * 0.03, 28), 1.1, 0.24);
+
           ctx.restore();
         }
 
@@ -1631,7 +1745,10 @@
 
         function renderSky() {
           ctx.clearRect(0, 0, width, height);
+          windAngle = (windAngle + 0.005) % (Math.PI * 2);
+
           drawConstellations();
+          drawChiayiMountainsAndHsinchuWindmills();
 
           for (const s of stars) {
             s.phase += s.speed;
