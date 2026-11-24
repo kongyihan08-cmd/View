@@ -1167,7 +1167,7 @@
             return;
           }
 
-        // Public shared document so both sender and recipient see saved responses across tabs/devices
+          // Public shared document so both sender and recipient see saved responses across tabs/devices
           sharedSlipsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'card_rebuttals', 'jenhao_1123');
 
           onSnapshot(
@@ -1175,7 +1175,7 @@
             (snapshot) => {
               if (snapshot.exists()) {
                 const data = snapshot.data();
-                if (Array.isArray(data.slips)) {
+                if (Array.isArray(data.slips) && data.slips.length > 0) {
                   reviewerSlips = data.slips;
                   renderReviewerSlips();
                 }
@@ -1211,7 +1211,8 @@
             {
               slips: reviewerSlips,
               updatedAt: Date.now()
-            }
+            },
+            { merge: true }
           );
           setSyncIndicator('synced', 'Cloud Synced');
           return true;
